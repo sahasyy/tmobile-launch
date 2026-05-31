@@ -3,6 +3,7 @@
 import { BorderGrainShader } from "./BorderGrainShader";
 import { PanelGrainGradientShader } from "./PanelGrainGradientShader";
 import { PanelText } from "./PanelText";
+import { SandBeamShader } from "./SandBeamShader";
 
 export function LaunchFrame() {
   return (
@@ -13,7 +14,8 @@ export function LaunchFrame() {
         <div className="relative h-full w-full overflow-hidden rounded-[clamp(48px,5.4vw,88px)] bg-white p-[clamp(24px,2.35vw,38px)]">
           <div className="grid h-full w-full grid-cols-[1.05fr_0.95fr] gap-[clamp(24px,2.35vw,38px)] max-md:grid-cols-1">
             <Panel className="min-h-0 max-md:min-h-[56dvh]">
-              <PanelFill />
+              <SandBeamShader />
+              <div className="absolute inset-x-0 bottom-0 h-[46%] bg-gradient-to-t from-[#00168f]/72 via-[#00168f]/26 to-transparent" />
               <PanelText tone="large">
                 I&rsquo;m joining
                 <br />

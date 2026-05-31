@@ -11,7 +11,7 @@ shader with magenta, rose, blush-white, coral, and a restrained mint complement.
 
 | Panel | Copy | Surface |
 |--------|------|---------|
-| Big left | "I'm joining T-Mobile" | Erode + flat purple panel |
+| Big left | "I'm joining T-Mobile" | Erode + animated blue sand-beam shader |
 | Top right | "As a ML Engineer" | Erode + WebGL grain-gradient panel |
 | Bottom right | "for Summer 2026" | Erode + flat purple panel |
 
@@ -55,6 +55,7 @@ components/
   LaunchFrame.tsx   framed 1-large + 2-stacked panel layout
   BorderGrainShader.tsx animated WebGL paper-grain frame
   PanelGrainGradientShader.tsx soft WebGL grain-gradient panel
+  SandBeamShader.tsx blue WebGL sand-beam panel shader
   PanelText.tsx     Framer Motion panel copy reveal
 ```
 
