@@ -1,21 +1,20 @@
 # ML Intern @ T-Mobile - Hard Launch
 
 A camera-reactive, single-page hero site announcing an ML Engineer internship at T-Mobile.
-Built with **Next.js 16 + TypeScript + Tailwind + Framer Motion + WebGL**, with Aceternity-style
-Aurora and Spotlight effects.
+Built with **Next.js 16 + TypeScript + Tailwind + Framer Motion + WebGL**.
 
-White minimalist canvas, T-Mobile magenta (`#E20074`), one confident line of copy, and three
-floating bubbles, each a different live effect powered by your webcam.
+Light canvas, T-Mobile magenta (`#E20074`) frame, one confident line of copy, and three
+rounded panels, each with a different live effect powered by your webcam.
 
-## The three bubbles
+## The three panels
 
-| Bubble | Effect | Tech |
+| Panel | Effect | Tech |
 |--------|--------|------|
-| Big (left) | Ordered **Bayer dithering** halftone of the camera, in magenta/white | Canvas 2D + 8×8 Bayer matrix |
+| Big (left) | Ordered **Bayer dithering** halftone of the camera, behind the announcement | Canvas 2D + 8×8 Bayer matrix |
 | Small (top-right) | **Aurora gradient swirl** that warps toward your motion | WebGL fragment shader (GLSL, domain-warped fBm) |
 | Small (bottom-right) | Live **ASCII art** camera feed with scanlines | Canvas luminance → character ramp |
 
-The whole cluster parallaxes toward your face/cursor, and a magenta edge halo tracks your position.
+The whole grid subtly parallaxes toward your face/cursor, and the magenta frame tracks your position.
 No camera? Everything falls back to procedural animation automatically. **No video ever leaves the
 browser. Nothing is uploaded or stored.**
 
@@ -48,16 +47,13 @@ All the visible announcement text lives in `components/HeroText.tsx`. The magent
 app/
   layout.tsx        fonts (Bebas Neue + Space Mono) and metadata
   page.tsx          orchestrates camera loop, halo, layers
-  globals.css       grain overlay, spotlight keyframe
+  globals.css       grain overlay and global background
 components/
-  Bubbles.tsx       layout + parallax for the three bubbles
+  LaunchFrame.tsx   framed 1-large + 2-stacked panel layout
   DitherBubble.tsx  Bayer dither renderer
   GradientBubble.tsx WebGL aurora shader
   AsciiBubble.tsx   ASCII camera feed
   HeroText.tsx      Framer Motion staggered reveal
-  ui/
-    aurora-background.tsx   Aceternity-style aurora
-    spotlight.tsx           Aceternity-style spotlight
 hooks/
   useCamera.ts      getUserMedia + per-frame luminance/motion sampling
 lib/

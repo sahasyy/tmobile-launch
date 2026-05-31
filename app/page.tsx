@@ -2,10 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { useCamera } from "@/hooks/useCamera";
-import { Bubbles } from "@/components/Bubbles";
-import { HeroText } from "@/components/HeroText";
-import { AuroraBackground } from "@/components/ui/aurora-background";
-import { Spotlight } from "@/components/ui/spotlight";
+import { LaunchFrame } from "@/components/LaunchFrame";
 
 export default function Home() {
   const { ready, sample, stateRef, motionRef } = useCamera();
@@ -35,24 +32,13 @@ export default function Home() {
   }, [sample, motionRef]);
 
   return (
-    <main className="relative h-dvh min-h-dvh w-screen overflow-hidden bg-white">
-      {/* edge halo (camera reactive) */}
-      <div ref={haloRef} className="pointer-events-none absolute inset-0 z-[1]" />
-
-      {/* aurora glow, top-right */}
-      <AuroraBackground />
-
-      {/* spotlight sweeping the hero */}
-      <Spotlight className="-top-40 left-0 md:-top-20 md:left-60" />
-
-      {/* the three camera-driven bubbles */}
-      <Bubbles stateRef={stateRef} motionRef={motionRef} ready={ready} />
-
-      {/* hero copy */}
-      <div className="relative z-20 flex h-full w-full items-center">
-        <div className="ml-[6vw]">
-          <HeroText />
-        </div>
+    <main className="relative h-dvh min-h-dvh w-screen overflow-hidden bg-[#f3f4f8]">
+      <div
+        ref={haloRef}
+        className="pointer-events-none absolute inset-0 z-0 opacity-70"
+      />
+      <div className="relative z-10 h-full w-full">
+        <LaunchFrame stateRef={stateRef} motionRef={motionRef} ready={ready} />
       </div>
     </main>
   );

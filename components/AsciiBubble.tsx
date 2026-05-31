@@ -79,19 +79,20 @@ export function AsciiBubble({ stateRef, ready }: Props) {
   }, [stateRef, ready]);
 
   return (
-    <div className="relative h-full w-full overflow-hidden bg-[#0a0006]">
+    <div className="relative h-full w-full overflow-hidden bg-[#5d41f1]">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_35%_18%,rgba(255,105,190,0.42),transparent_34%),linear-gradient(135deg,#6649f6,#4f37e6)]" />
       {/* scanlines */}
       <div
         className="pointer-events-none absolute inset-0 opacity-30"
         style={{
           backgroundImage:
-            "repeating-linear-gradient(0deg, rgba(0,0,0,0.6) 0px, rgba(0,0,0,0.6) 1px, transparent 1px, transparent 3px)",
+            "repeating-linear-gradient(0deg, rgba(255,255,255,0.20) 0px, rgba(255,255,255,0.20) 1px, transparent 1px, transparent 4px)",
         }}
       />
       <pre
         ref={preRef}
-        className="absolute inset-0 flex items-center justify-center whitespace-pre text-center font-mono leading-[1.05] text-magenta-400"
-        style={{ fontSize: "6px" }}
+        className="absolute inset-0 flex items-center justify-center whitespace-pre text-center font-mono leading-[1.05] text-white/82 mix-blend-screen"
+        style={{ fontSize: "clamp(6px, 0.62vw, 10px)" }}
         aria-hidden="true"
       />
     </div>

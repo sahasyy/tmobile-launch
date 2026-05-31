@@ -5,25 +5,17 @@ import { motion, type Variants } from "framer-motion";
 const container: Variants = {
   hidden: {},
   show: {
-    transition: { staggerChildren: 0.18, delayChildren: 0.3 },
+    transition: { staggerChildren: 0.13, delayChildren: 0.25 },
   },
 };
 
 const item: Variants = {
-  hidden: { opacity: 0, y: 24, filter: "blur(8px)" },
+  hidden: { opacity: 0, y: 18, filter: "blur(8px)" },
   show: {
     opacity: 1,
     y: 0,
     filter: "blur(0px)",
-    transition: { duration: 0.9, ease: [0.22, 1, 0.36, 1] },
-  },
-};
-
-const line: Variants = {
-  hidden: { width: 0 },
-  show: {
-    width: "100%",
-    transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: 1.1 },
+    transition: { duration: 0.75, ease: [0.22, 1, 0.36, 1] },
   },
 };
 
@@ -33,28 +25,23 @@ export function HeroText() {
       variants={container}
       initial="hidden"
       animate="show"
-      className="relative z-20 max-w-[760px] pl-5"
+      className="absolute inset-x-[clamp(26px,4.8vw,72px)] bottom-[clamp(28px,5vw,78px)] z-20 max-w-[620px]"
     >
       <motion.h1
         variants={item}
-        className="font-display text-[clamp(48px,7vw,96px)] leading-[0.94] tracking-[0.01em] text-neutral-900 [text-shadow:0_2px_18px_rgba(255,255,255,0.9)]"
+        className="font-display text-[clamp(48px,6.4vw,104px)] leading-[0.9] tracking-[0.01em] text-white [text-shadow:0_2px_24px_rgba(22,12,82,0.28)]"
       >
         I&rsquo;ll be an
         <br />
         ML intern
         <br />
         at{" "}
-        <span className="text-white [-webkit-text-stroke:1px_#E20074] [text-shadow:0_2px_14px_rgba(226,0,116,0.45)]">
+        <span className="text-[#ff5dbc] [-webkit-text-stroke:1px_rgba(255,255,255,0.72)] [text-shadow:none]">
           T&#8209;Mobile
         </span>
         <br />
         this summer.
       </motion.h1>
-
-      <motion.div
-        variants={line}
-        className="mt-5 h-[2px] max-w-[520px] bg-magenta"
-      />
     </motion.div>
   );
 }
