@@ -27,7 +27,14 @@ npm install
 npm run dev
 ```
 
-Open http://localhost:3000 and allow camera access when prompted.
+Keep that terminal running, then open http://localhost:3000 and allow camera access when prompted.
+
+`npm run build` only checks that the production bundle compiles. It does not start a server by
+itself. For a production-style local preview, run:
+
+```bash
+npm run preview
+```
 
 ## Deploy (free, ~30 seconds)
 
