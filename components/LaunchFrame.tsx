@@ -1,5 +1,7 @@
 "use client";
 
+import { GradientBackground } from "@/components/ui/paper-design-shader-background";
+
 import { BorderGrainShader } from "./BorderGrainShader";
 import { PanelGrainGradientShader } from "./PanelGrainGradientShader";
 import { PanelText } from "./PanelText";
@@ -34,8 +36,17 @@ export function LaunchFrame() {
                 </PanelText>
               </Panel>
 
-              <Panel>
-                <PanelFill />
+              <Panel className="bg-black">
+                <GradientBackground
+                  className="absolute inset-0"
+                  colors={[
+                    "hsl(336, 92%, 54%)",
+                    "hsl(18, 100%, 58%)",
+                    "hsl(45, 100%, 58%)",
+                  ]}
+                />
+                <div className="absolute inset-0 bg-black/20" />
+                <div className="absolute inset-x-0 bottom-0 h-[46%] bg-gradient-to-t from-black/28 to-transparent" />
                 <PanelText tone="date">
                   for
                   <br />
@@ -63,21 +74,5 @@ function Panel({
     >
       {children}
     </div>
-  );
-}
-
-function PanelFill() {
-  return (
-    <>
-      <div className="absolute inset-0 bg-[#6043f4]" />
-      <div className="absolute inset-0 opacity-[0.16] [background-image:radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.38),transparent_32%),linear-gradient(135deg,rgba(255,255,255,0.08),rgba(72,47,230,0))]" />
-      <div
-        className="absolute inset-0 opacity-[0.03]"
-        style={{
-          backgroundImage:
-            "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)'/%3E%3C/svg%3E\")",
-        }}
-      />
-    </>
   );
 }

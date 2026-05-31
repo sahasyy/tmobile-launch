@@ -1,11 +1,11 @@
 # ML Intern @ T-Mobile - Hard Launch
 
 A single-page hero site announcing an ML Engineer internship at T-Mobile for Summer 2026.
-Built with **Next.js 16 + TypeScript + Tailwind + Framer Motion + WebGL**.
+Built with **Next.js 16 + TypeScript + Tailwind + Framer Motion + WebGL + Paper shaders**.
 
 Light canvas, T-Mobile magenta (`#E20074`) outer frame, a thick rounded white inner frame, and
-three clean purple panels using the Erode typeface. The outer hero frame uses a slow paper-grain
-shader with magenta, rose, blush-white, coral, and a restrained mint complement.
+three rounded panels using the Erode typeface. The outer hero frame uses a slow paper-grain shader
+with magenta, rose, blush-white, coral, and a restrained mint complement.
 
 ## The Three Panels
 
@@ -13,7 +13,7 @@ shader with magenta, rose, blush-white, coral, and a restrained mint complement.
 |--------|------|---------|
 | Big left | "I'm joining T-Mobile" | Erode + animated blue sand-beam shader |
 | Top right | "As a ML Engineer" | Erode + WebGL grain-gradient panel |
-| Bottom right | "for Summer 2026" | Erode + flat purple panel |
+| Bottom right | "for Summer 2026" | Erode + Paper Design GrainGradient shader |
 
 The magenta frame keeps the subtle shader motion; the panels stay clean and stable.
 
@@ -57,6 +57,8 @@ components/
   PanelGrainGradientShader.tsx soft WebGL grain-gradient panel
   SandBeamShader.tsx blue WebGL sand-beam panel shader
   PanelText.tsx     Framer Motion panel copy reveal
+  ui/
+    paper-design-shader-background.tsx reusable Paper Design shader background
 ```
 
 ## Notes
