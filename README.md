@@ -12,7 +12,7 @@ shader with magenta, rose, blush-white, coral, and a restrained mint complement.
 | Panel | Copy | Surface |
 |--------|------|---------|
 | Big left | "I'm joining T-Mobile" | Erode + flat purple panel |
-| Top right | "As a ML Engineer" | Erode + flat purple panel |
+| Top right | "As a ML Engineer" | Erode + WebGL grain-gradient panel |
 | Bottom right | "for Summer 2026" | Erode + flat purple panel |
 
 The magenta frame keeps the subtle shader motion; the panels stay clean and stable.
@@ -54,6 +54,7 @@ app/
 components/
   LaunchFrame.tsx   framed 1-large + 2-stacked panel layout
   BorderGrainShader.tsx animated WebGL paper-grain frame
+  PanelGrainGradientShader.tsx soft WebGL grain-gradient panel
   PanelText.tsx     Framer Motion panel copy reveal
 ```
 

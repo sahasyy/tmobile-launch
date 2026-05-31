@@ -14,16 +14,22 @@ const copy: Variants = {
 
 interface Props {
   tone?: "large" | "short" | "date";
+  variant?: "light" | "dark";
   children: React.ReactNode;
 }
 
-export function PanelText({ tone = "short", children }: Props) {
+export function PanelText({ tone = "short", variant = "light", children }: Props) {
   const size =
     tone === "large"
       ? "text-[clamp(52px,6.4vw,108px)] leading-[0.88]"
       : tone === "date"
         ? "text-[clamp(38px,4.4vw,78px)] leading-[0.9]"
         : "text-[clamp(42px,4.9vw,82px)] leading-[0.9]";
+
+  const color =
+    variant === "dark"
+      ? "text-[#271238] [text-shadow:0_1px_14px_rgba(255,255,255,0.36)]"
+      : "text-white [text-shadow:0_1px_12px_rgba(32,16,120,0.12)]";
 
   return (
     <motion.div
@@ -35,7 +41,7 @@ export function PanelText({ tone = "short", children }: Props) {
       <div
         role="heading"
         aria-level={1}
-        className={`font-display font-light ${size} tracking-[0em] text-white [text-shadow:0_1px_12px_rgba(32,16,120,0.12)]`}
+        className={`font-display font-light ${size} ${color} tracking-[0em]`}
       >
         {children}
       </div>

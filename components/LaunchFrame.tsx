@@ -1,6 +1,7 @@
 "use client";
 
 import { BorderGrainShader } from "./BorderGrainShader";
+import { PanelGrainGradientShader } from "./PanelGrainGradientShader";
 import { PanelText } from "./PanelText";
 
 export function LaunchFrame() {
@@ -21,9 +22,10 @@ export function LaunchFrame() {
             </Panel>
 
             <div className="grid min-h-0 grid-rows-2 gap-[clamp(24px,2.35vw,38px)] max-md:min-h-[76dvh]">
-              <Panel>
-                <PanelFill />
-                <PanelText tone="short">
+              <Panel className="bg-[#f8f7f5]">
+                <PanelGrainGradientShader />
+                <div className="absolute inset-0 bg-white/10" />
+                <PanelText tone="short" variant="dark">
                   As a
                   <br />
                   ML Engineer
