@@ -1,20 +1,5 @@
 import type { Metadata } from "next";
-import { Bebas_Neue, Space_Mono } from "next/font/google";
 import "./globals.css";
-
-const display = Bebas_Neue({
-  weight: "400",
-  subsets: ["latin"],
-  variable: "--font-display",
-  display: "swap",
-});
-
-const mono = Space_Mono({
-  weight: ["400", "700"],
-  subsets: ["latin"],
-  variable: "--font-mono",
-  display: "swap",
-});
 
 export const metadata: Metadata = {
   title: "ML Intern @ T-Mobile",
@@ -34,9 +19,13 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${display.variable} ${mono.variable} grain`}>
-        {children}
-      </body>
+      <head>
+        <link
+          href="https://api.fontshare.com/v2/css?f[]=erode@300&display=swap"
+          rel="stylesheet"
+        />
+      </head>
+      <body className="grain">{children}</body>
     </html>
   );
 }

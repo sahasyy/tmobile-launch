@@ -15,7 +15,7 @@ body {
 
 body {
   color: #111;
-  font-family: var(--font-mono), monospace;
+  font-family: "Erode", serif;
 }
 
 /* Film grain overlay */

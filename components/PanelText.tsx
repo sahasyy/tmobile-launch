@@ -20,23 +20,25 @@ interface Props {
 export function PanelText({ tone = "short", children }: Props) {
   const size =
     tone === "large"
-      ? "text-[clamp(54px,7vw,118px)] leading-[0.88]"
+      ? "text-[clamp(52px,6.4vw,108px)] leading-[0.88]"
       : tone === "date"
-        ? "text-[clamp(48px,5.8vw,96px)] leading-[0.86]"
-        : "text-[clamp(58px,6.7vw,112px)] leading-[0.82]";
+        ? "text-[clamp(38px,4.4vw,78px)] leading-[0.9]"
+        : "text-[clamp(42px,4.9vw,82px)] leading-[0.9]";
 
   return (
     <motion.div
       initial="hidden"
       animate="show"
       variants={copy}
-      className="absolute inset-x-[clamp(24px,4.4vw,70px)] bottom-[clamp(24px,4.8vw,70px)] z-20"
+      className="absolute inset-x-[clamp(28px,4.5vw,72px)] bottom-[clamp(28px,4.6vw,74px)] z-20"
     >
-      <h1
-        className={`font-display ${size} tracking-[0.01em] text-white [text-shadow:0_2px_22px_rgba(126,0,63,0.2)]`}
+      <div
+        role="heading"
+        aria-level={1}
+        className={`font-display font-light ${size} tracking-[0em] text-white [text-shadow:0_1px_12px_rgba(32,16,120,0.12)]`}
       >
         {children}
-      </h1>
+      </div>
     </motion.div>
   );
 }

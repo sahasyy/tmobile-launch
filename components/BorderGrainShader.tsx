@@ -1,12 +1,6 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import type { CameraMotion } from "@/hooks/useCamera";
-
-interface Props {
-  motionRef: React.MutableRefObject<CameraMotion>;
-}
-
 const VERT = `
 attribute vec2 aPos;
 void main() {
@@ -93,7 +87,7 @@ function compile(gl: WebGLRenderingContext, type: number, src: string) {
   return shader;
 }
 
-export function BorderGrainShader({ motionRef }: Props) {
+export function BorderGrainShader() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
   useEffect(() => {
@@ -156,7 +150,7 @@ export function BorderGrainShader({ motionRef }: Props) {
     resize();
 
     const render = () => {
-      const motion = motionRef.current;
+      const motion = { x: 0, y: 0, brightness: 0.5 };
       smX += (motion.x - smX) * 0.045;
       smY += (motion.y - smY) * 0.045;
       smB += (motion.brightness - smB) * 0.045;
@@ -180,7 +174,7 @@ export function BorderGrainShader({ motionRef }: Props) {
       gl.deleteShader(frag);
       gl.deleteBuffer(buffer);
     };
-  }, [motionRef]);
+  }, []);
 
   return (
     <canvas

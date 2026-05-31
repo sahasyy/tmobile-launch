@@ -1,79 +1,46 @@
 "use client";
 
-import { motion, useMotionValue, useSpring } from "framer-motion";
-import { useEffect } from "react";
-import { DitherBubble } from "./DitherBubble";
-import { GradientBubble } from "./GradientBubble";
-import { AsciiBubble } from "./AsciiBubble";
-import { PanelText } from "./PanelText";
 import { BorderGrainShader } from "./BorderGrainShader";
-import type { CameraMotion, CameraState } from "@/hooks/useCamera";
+import { PanelText } from "./PanelText";
 
-interface Props {
-  stateRef: React.MutableRefObject<CameraState>;
-  motionRef: React.MutableRefObject<CameraMotion>;
-  ready: boolean;
-}
-
-export function LaunchFrame({ stateRef, motionRef, ready }: Props) {
-  const px = useMotionValue(0);
-  const py = useMotionValue(0);
-  const sx = useSpring(px, { stiffness: 34, damping: 22 });
-  const sy = useSpring(py, { stiffness: 34, damping: 22 });
-
-  useEffect(() => {
-    let raf = 0;
-
-    const tick = () => {
-      const motion = motionRef.current;
-      px.set(motion.x * 10);
-      py.set(motion.y * 10);
-      raf = requestAnimationFrame(tick);
-    };
-
-    raf = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(raf);
-  }, [motionRef, px, py]);
-
+export function LaunchFrame() {
   return (
-    <section className="relative h-full w-full bg-[#f3f4f8] p-[clamp(18px,2.65vw,44px)]">
-      <div className="relative h-full w-full overflow-hidden bg-magenta p-[clamp(18px,2vw,32px)]">
-        <BorderGrainShader motionRef={motionRef} />
-        <motion.div
-          className="relative grid h-full w-full grid-cols-[1.05fr_0.95fr] gap-[clamp(18px,2vw,32px)] max-md:grid-cols-1"
-          style={{ x: sx, y: sy }}
-        >
-          <Panel className="min-h-0 max-md:min-h-[52dvh]">
-            <DitherBubble stateRef={stateRef} motionRef={motionRef} ready={ready} />
-            <div className="absolute inset-0 bg-[#E20074]/34 mix-blend-screen" />
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_22%_20%,rgba(255,255,255,0.34),transparent_34%),linear-gradient(135deg,rgba(226,0,116,0.28),rgba(255,99,188,0.36))]" />
-            <PanelText tone="large">
-              I&rsquo;m joining
-              <br />
-              <span className="text-white [-webkit-text-stroke:1px_#E20074]">
-                T&#8209;Mobile
-              </span>
-            </PanelText>
-          </Panel>
+    <section className="relative min-h-dvh w-full bg-[#f2f3f7] p-[clamp(12px,2.1vw,36px)] md:h-full">
+      <div className="relative h-full w-full overflow-hidden bg-magenta p-[clamp(26px,2.7vw,44px)]">
+        <BorderGrainShader />
 
-          <div className="grid min-h-0 grid-rows-2 gap-[clamp(18px,2vw,32px)] max-md:min-h-[48dvh]">
-            <Panel>
-              <GradientBubble motionRef={motionRef} />
-              <div className="absolute inset-0 bg-[#E20074]/14 mix-blend-screen" />
-              <PanelText>ML Eng</PanelText>
-            </Panel>
-
-            <Panel>
-              <AsciiBubble stateRef={stateRef} ready={ready} />
-              <div className="absolute inset-0 bg-[#E20074]/18 mix-blend-screen" />
-              <PanelText tone="date">
-                Summer
+        <div className="relative h-full w-full overflow-hidden rounded-[clamp(48px,5.4vw,88px)] bg-white p-[clamp(24px,2.35vw,38px)]">
+          <div className="grid h-full w-full grid-cols-[1.05fr_0.95fr] gap-[clamp(24px,2.35vw,38px)] max-md:grid-cols-1">
+            <Panel className="min-h-0 max-md:min-h-[56dvh]">
+              <PanelFill />
+              <PanelText tone="large">
+                I&rsquo;m joining
                 <br />
-                2026
+                T&#8209;Mobile
               </PanelText>
             </Panel>
+
+            <div className="grid min-h-0 grid-rows-2 gap-[clamp(24px,2.35vw,38px)] max-md:min-h-[76dvh]">
+              <Panel>
+                <PanelFill />
+                <PanelText tone="short">
+                  As a
+                  <br />
+                  ML Engineer
+                </PanelText>
+              </Panel>
+
+              <Panel>
+                <PanelFill />
+                <PanelText tone="date">
+                  for
+                  <br />
+                  Summer 2026
+                </PanelText>
+              </Panel>
+            </div>
           </div>
-        </motion.div>
+        </div>
       </div>
     </section>
   );
@@ -88,9 +55,25 @@ function Panel({
 }) {
   return (
     <div
-      className={`relative isolate overflow-hidden rounded-[clamp(34px,4.2vw,74px)] bg-[#ff5db8] ${className}`}
+      className={`relative isolate overflow-hidden rounded-[clamp(34px,4.25vw,74px)] bg-[#6043f4] ${className}`}
     >
       {children}
     </div>
+  );
+}
+
+function PanelFill() {
+  return (
+    <>
+      <div className="absolute inset-0 bg-[#6043f4]" />
+      <div className="absolute inset-0 opacity-[0.16] [background-image:radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.38),transparent_32%),linear-gradient(135deg,rgba(255,255,255,0.08),rgba(72,47,230,0))]" />
+      <div
+        className="absolute inset-0 opacity-[0.03]"
+        style={{
+          backgroundImage:
+            "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)'/%3E%3C/svg%3E\")",
+        }}
+      />
+    </>
   );
 }

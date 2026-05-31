@@ -2,7 +2,7 @@
   "name": "tmobile-ml-launch",
   "version": "1.0.0",
   "private": true,
-  "description": "Camera-reactive hard-launch hero site for an ML internship at T-Mobile",
+  "description": "Hard-launch hero site for an ML internship at T-Mobile",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -11,12 +11,10 @@
     "lint": "eslint ."
   },
   "dependencies": {
-    "clsx": "^2.1.1",
     "framer-motion": "^12.40.0",
     "next": "^16.2.6",
     "react": "^19.2.6",
-    "react-dom": "^19.2.6",
-    "tailwind-merge": "^3.6.0"
+    "react-dom": "^19.2.6"
   },
   "devDependencies": {
     "@types/node": "^25.9.1",

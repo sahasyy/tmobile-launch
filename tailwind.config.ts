@@ -23,8 +23,8 @@ const config: Config = {
         },
       },
       fontFamily: {
-        display: ["var(--font-display)", "sans-serif"],
-        mono: ["var(--font-mono)", "monospace"],
+        display: ["Erode", "serif"],
+        mono: ["Erode", "serif"],
       },
       animation: {
         aurora: "aurora 60s linear infinite",
