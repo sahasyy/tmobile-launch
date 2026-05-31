@@ -5,6 +5,8 @@ Built with **Next.js 16 + TypeScript + Tailwind + Framer Motion + WebGL**.
 
 Light canvas, T-Mobile magenta (`#E20074`) frame, one confident line of copy, and three
 rounded panels, each with a different live effect powered by your webcam.
+The outer hero frame uses a slow paper-grain shader with magenta, rose, blush-white, lavender,
+and a restrained mint complement.
 
 ## The three panels
 
@@ -50,6 +52,7 @@ app/
   globals.css       grain overlay and global background
 components/
   LaunchFrame.tsx   framed 1-large + 2-stacked panel layout
+  BorderGrainShader.tsx animated WebGL paper-grain frame
   DitherBubble.tsx  Bayer dither renderer
   GradientBubble.tsx WebGL aurora shader
   AsciiBubble.tsx   ASCII camera feed

@@ -6,6 +6,7 @@ import { DitherBubble } from "./DitherBubble";
 import { GradientBubble } from "./GradientBubble";
 import { AsciiBubble } from "./AsciiBubble";
 import { HeroText } from "./HeroText";
+import { BorderGrainShader } from "./BorderGrainShader";
 import type { CameraMotion, CameraState } from "@/hooks/useCamera";
 
 interface Props {
@@ -36,8 +37,9 @@ export function LaunchFrame({ stateRef, motionRef, ready }: Props) {
 
   return (
     <section className="relative h-full w-full bg-[#f3f4f8] p-[clamp(18px,2.65vw,44px)]">
-      <div className="h-full w-full bg-magenta p-[clamp(18px,2vw,32px)]">
-        <div className="h-full w-full overflow-hidden rounded-[clamp(42px,6vw,86px)] bg-white p-[clamp(18px,1.9vw,31px)]">
+      <div className="relative h-full w-full overflow-hidden bg-magenta p-[clamp(18px,2vw,32px)]">
+        <BorderGrainShader motionRef={motionRef} />
+        <div className="relative h-full w-full overflow-hidden rounded-[clamp(42px,6vw,86px)] bg-white p-[clamp(18px,1.9vw,31px)]">
           <motion.div
             className="grid h-full w-full grid-cols-[1.05fr_0.95fr] gap-[clamp(18px,2.1vw,36px)] max-md:grid-cols-1"
             style={{ x: sx, y: sy }}
