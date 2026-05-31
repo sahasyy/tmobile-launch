@@ -18,7 +18,7 @@ interface Props {
 }
 
 /**
- * Renders the camera as a violet/magenta ordered-dither halftone.
+ * Renders the camera as a blush/magenta ordered-dither halftone.
  * When no camera is present, animates a procedural plasma instead.
  */
 export function DitherBubble({ stateRef, motionRef, ready }: Props) {
@@ -71,12 +71,12 @@ export function DitherBubble({ stateRef, motionRef, ready }: Props) {
           const i = (y * SIZE + x) * 4;
           if (on) {
             img.data[i] = 255;
-            img.data[i + 1] = 77;
-            img.data[i + 2] = 184;
+            img.data[i + 1] = 92;
+            img.data[i + 2] = 190;
           } else {
-            img.data[i] = 82;
-            img.data[i + 1] = 58;
-            img.data[i + 2] = 232;
+            img.data[i] = 255;
+            img.data[i + 1] = 232;
+            img.data[i + 2] = 246;
           }
           img.data[i + 3] = 255;
         }

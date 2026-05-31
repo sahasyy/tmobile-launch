@@ -1,20 +1,20 @@
 # ML Intern @ T-Mobile - Hard Launch
 
-A camera-reactive, single-page hero site announcing an ML Engineer internship at T-Mobile.
+A camera-reactive, single-page hero site announcing an ML Engineer internship at T-Mobile for Summer 2026.
 Built with **Next.js 16 + TypeScript + Tailwind + Framer Motion + WebGL**.
 
-Light canvas, T-Mobile magenta (`#E20074`) frame, one confident line of copy, and three
-rounded panels, each with a different live effect powered by your webcam.
-The outer hero frame uses a slow paper-grain shader with magenta, rose, blush-white, lavender,
+Light canvas, T-Mobile magenta (`#E20074`) frame, three short copy panels, and a different
+live effect in each panel powered by your webcam.
+The outer hero frame uses a slow paper-grain shader with magenta, rose, blush-white, coral,
 and a restrained mint complement.
 
 ## The three panels
 
 | Panel | Effect | Tech |
 |--------|--------|------|
-| Big (left) | Ordered **Bayer dithering** halftone of the camera, behind the announcement | Canvas 2D + 8×8 Bayer matrix |
-| Small (top-right) | **Aurora gradient swirl** that warps toward your motion | WebGL fragment shader (GLSL, domain-warped fBm) |
-| Small (bottom-right) | Live **ASCII art** camera feed with scanlines | Canvas luminance → character ramp |
+| Big (left) | "I'm joining T-Mobile" over ordered **Bayer dithering** | Canvas 2D + 8×8 Bayer matrix |
+| Top-right | "ML Eng" over an **aurora gradient swirl** that warps toward your motion | WebGL fragment shader (GLSL, domain-warped fBm) |
+| Bottom-right | "Summer 2026" over live **ASCII art** camera feed with scanlines | Canvas luminance → character ramp |
 
 The whole grid subtly parallaxes toward your face/cursor, and the magenta frame tracks your position.
 No camera? Everything falls back to procedural animation automatically. **No video ever leaves the
@@ -40,7 +40,7 @@ Open http://localhost:3000 and allow camera access when prompted.
 
 ## Editing the copy
 
-All the visible announcement text lives in `components/HeroText.tsx`. The magenta accent is the
+All the visible announcement text lives in `components/PanelText.tsx` and `components/LaunchFrame.tsx`. The magenta accent is the
 `text-magenta` class, defined in `tailwind.config.ts`.
 
 ## Project structure
@@ -56,7 +56,7 @@ components/
   DitherBubble.tsx  Bayer dither renderer
   GradientBubble.tsx WebGL aurora shader
   AsciiBubble.tsx   ASCII camera feed
-  HeroText.tsx      Framer Motion staggered reveal
+  PanelText.tsx     Framer Motion panel copy reveal
 hooks/
   useCamera.ts      getUserMedia + per-frame luminance/motion sampling
 lib/

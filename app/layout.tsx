@@ -19,10 +19,10 @@ const mono = Space_Mono({
 export const metadata: Metadata = {
   title: "ML Intern @ T-Mobile",
   description:
-    "I'll be an ML intern at T-Mobile this summer. A camera-reactive hard launch.",
+    "I'm joining T-Mobile as an ML Engineer in Summer 2026. A camera-reactive hard launch.",
   openGraph: {
     title: "ML Intern @ T-Mobile",
-    description: "I'll be an ML intern at T-Mobile this summer.",
+    description: "I'm joining T-Mobile as an ML Engineer in Summer 2026.",
     type: "website",
   },
 };

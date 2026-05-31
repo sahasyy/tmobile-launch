@@ -14,7 +14,7 @@ void main() {
 }
 `;
 
-// Domain-warped violet/magenta aurora. Camera motion steers the flow direction
+// Domain-warped pink/magenta aurora. Camera motion steers the flow direction
 // and the soft core, brightness pumps the overall energy.
 const FRAG = `
 precision highp float;
@@ -45,14 +45,14 @@ void main(){
   vec2 warp = uv + q*0.6 + uMotion*0.25;
   float f = fbm(warp*2.0 + uTime*0.12);
 
-  vec3 deep    = vec3(0.18, 0.10, 0.72);
-  vec3 violet  = vec3(0.38, 0.26, 0.96);
+  vec3 deep    = vec3(0.75, 0.02, 0.38);
+  vec3 rose    = vec3(1.00, 0.36, 0.72);
   vec3 magenta = vec3(0.95, 0.12, 0.60);
-  vec3 hot     = vec3(1.0, 0.62, 0.86);
+  vec3 hot     = vec3(1.0, 0.72, 0.90);
   vec3 white   = vec3(1.0);
 
-  vec3 col = mix(deep, violet, smoothstep(0.12, 0.58, f));
-  col = mix(col, magenta, smoothstep(0.45, 0.85, f) * 0.7);
+  vec3 col = mix(deep, rose, smoothstep(0.12, 0.58, f));
+  col = mix(col, magenta, smoothstep(0.45, 0.85, f) * 0.55);
   col = mix(col, hot, smoothstep(0.55, 0.95, f) * (0.6 + uBright*0.6));
 
   // white core that drifts with motion
@@ -61,7 +61,7 @@ void main(){
   col = mix(col, white, coreGlow * 0.35);
 
   float vignette = smoothstep(1.35, 0.18, r);
-  col = mix(vec3(0.36, 0.24, 0.93), col, vignette);
+  col = mix(vec3(0.98, 0.28, 0.66), col, vignette);
   gl_FragColor = vec4(col, 1.0);
 }
 `;

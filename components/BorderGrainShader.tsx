@@ -62,11 +62,11 @@ void main() {
   vec3 rose = vec3(1.000, 0.340, 0.730);
   vec3 blush = vec3(1.000, 0.775, 0.900);
   vec3 paper = vec3(1.000, 0.955, 0.985);
-  vec3 lavender = vec3(0.760, 0.620, 0.980);
+  vec3 coral = vec3(1.000, 0.520, 0.640);
   vec3 mint = vec3(0.805, 0.945, 0.905);
 
   vec3 col = mix(tmo, rose, smoothstep(0.18, 0.86, cloud) * 0.72);
-  col = mix(col, lavender, smoothstep(0.38, 0.82, fiber) * 0.16);
+  col = mix(col, coral, smoothstep(0.38, 0.82, fiber) * 0.12);
   col = mix(col, blush, smoothstep(0.64, 0.96, cloud + fiber * 0.45) * 0.22);
   col = mix(col, paper, smoothstep(0.82, 1.00, fiber) * 0.18);
   col = mix(col, mint, smoothstep(0.90, 1.00, softSpeckle) * 0.055);
