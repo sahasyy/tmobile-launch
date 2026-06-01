@@ -41,11 +41,11 @@ export function LaunchFrame() {
                   className="absolute inset-0"
                   colorBack="hsl(327, 100%, 18%)"
                   shape="wave"
-                  softness={0.92}
-                  intensity={0.42}
+                  softness={0.88}
+                  intensity={0.72}
                   noise={0.32}
-                  scale={1.1}
-                  speed={0.32}
+                  scale={1.25}
+                  speed={0.85}
                   colors={[
                     "hsl(327, 100%, 44%)",
                     "hsl(322, 78%, 60%)",
