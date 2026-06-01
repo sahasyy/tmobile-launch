@@ -52,18 +52,20 @@ void main() {
   float softSpeckle = noise(p * 145.0 + drift * 7.0);
   float fineGrain = hash(gl_FragCoord.xy + vec2(floor(uTime * 3.0)));
 
+  // Pink frame: rose-forward, magenta used only as a restrained accent (not loud).
   vec3 tmo = vec3(0.886, 0.000, 0.455);
-  vec3 rose = vec3(1.000, 0.340, 0.730);
-  vec3 blush = vec3(1.000, 0.775, 0.900);
-  vec3 paper = vec3(1.000, 0.955, 0.985);
-  vec3 coral = vec3(1.000, 0.520, 0.640);
-  vec3 mint = vec3(0.805, 0.945, 0.905);
+  vec3 rose = vec3(0.985, 0.475, 0.745);
+  vec3 pink = vec3(1.000, 0.640, 0.830);
+  vec3 blush = vec3(1.000, 0.820, 0.910);
+  vec3 paper = vec3(1.000, 0.955, 0.980);
+  vec3 petal = vec3(1.000, 0.720, 0.860);
 
-  vec3 col = mix(tmo, rose, smoothstep(0.18, 0.86, cloud) * 0.72);
-  col = mix(col, coral, smoothstep(0.38, 0.82, fiber) * 0.12);
-  col = mix(col, blush, smoothstep(0.64, 0.96, cloud + fiber * 0.45) * 0.22);
-  col = mix(col, paper, smoothstep(0.82, 1.00, fiber) * 0.18);
-  col = mix(col, mint, smoothstep(0.90, 1.00, softSpeckle) * 0.055);
+  // Base is rose/pink; magenta only seeps into the deepest cloud pockets.
+  vec3 col = mix(pink, rose, smoothstep(0.18, 0.86, cloud) * 0.70);
+  col = mix(col, tmo, smoothstep(0.74, 0.97, cloud) * 0.30);
+  col = mix(col, petal, smoothstep(0.38, 0.82, fiber) * 0.18);
+  col = mix(col, blush, smoothstep(0.60, 0.96, cloud + fiber * 0.45) * 0.30);
+  col = mix(col, paper, smoothstep(0.82, 1.00, fiber) * 0.20);
 
   float grain = (fineGrain - 0.5) * 0.085 + (softSpeckle - 0.5) * 0.055;
   col += grain * (0.92 + uBright * 0.18);

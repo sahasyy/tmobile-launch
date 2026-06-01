@@ -56,12 +56,13 @@ void main() {
   float fiber = fbm(vec2(p.x * 18.0 - t * 0.25, p.y * 8.0 + t * 0.16));
   float grain = hash(gl_FragCoord.xy + floor(uTime * 2.0));
 
-  vec3 base = vec3(0.972, 0.970, 0.965);
-  vec3 blue = vec3(0.405, 0.575, 0.875);
-  vec3 powder = vec3(0.745, 0.790, 0.905);
+  // Pink hues: blush base with soft rose and pink-petal blobs, a restrained magenta touch.
+  vec3 base = vec3(0.988, 0.965, 0.975);
+  vec3 petal = vec3(0.985, 0.800, 0.885);
+  vec3 powder = vec3(0.965, 0.855, 0.910);
   vec3 rose = vec3(0.965, 0.470, 0.735);
   vec3 magenta = vec3(0.886, 0.000, 0.455);
-  vec3 lavender = vec3(0.725, 0.650, 0.860);
+  vec3 blush = vec3(0.975, 0.720, 0.840);
 
   float b1 = blob(uv, vec2(0.72 + sin(t * 1.2) * 0.04, 0.72), vec2(0.55, 0.42));
   float b2 = blob(uv, vec2(0.24, 0.22 + cos(t) * 0.04), vec2(0.52, 0.38));
@@ -69,11 +70,11 @@ void main() {
   float b4 = blob(uv, vec2(0.44, 0.48), vec2(0.58, 0.42));
 
   vec3 color = base;
-  color = mix(color, powder, b1 * 0.48);
-  color = mix(color, blue, b1 * 0.36);
-  color = mix(color, rose, b2 * 0.58);
-  color = mix(color, magenta, b3 * 0.18);
-  color = mix(color, lavender, b4 * 0.34);
+  color = mix(color, powder, b1 * 0.50);
+  color = mix(color, petal, b1 * 0.34);
+  color = mix(color, rose, b2 * 0.46);
+  color = mix(color, magenta, b3 * 0.10);
+  color = mix(color, blush, b4 * 0.38);
 
   color = mix(color, vec3(1.0), smoothstep(0.78, 1.0, uv.x + uv.y) * 0.16);
   color += (paper - 0.5) * 0.035;

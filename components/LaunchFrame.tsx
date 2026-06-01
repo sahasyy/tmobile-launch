@@ -17,7 +17,7 @@ export function LaunchFrame() {
           <div className="grid h-full w-full grid-cols-[1.05fr_0.95fr] gap-[clamp(24px,2.35vw,38px)] max-md:grid-cols-1">
             <Panel className="min-h-0 max-md:min-h-[56dvh]">
               <SandBeamShader />
-              <div className="absolute inset-x-0 bottom-0 h-[56%] bg-gradient-to-t from-[#0011a8]/90 via-[#001cff]/50 to-transparent" />
+              <div className="absolute inset-x-0 bottom-0 h-[64%] bg-gradient-to-t from-magenta-800/95 via-magenta-700/65 to-transparent" />
               <PanelText tone="large">
                 I&rsquo;m joining
                 <br />
@@ -36,17 +36,17 @@ export function LaunchFrame() {
                 </PanelText>
               </Panel>
 
-              <Panel className="bg-black">
+              <Panel className="bg-[#3a0420]">
                 <GradientBackground
                   className="absolute inset-0"
                   colors={[
-                    "hsl(336, 92%, 54%)",
-                    "hsl(18, 100%, 58%)",
-                    "hsl(45, 100%, 58%)",
+                    "hsl(327, 100%, 44%)",
+                    "hsl(338, 88%, 62%)",
+                    "hsl(348, 92%, 74%)",
                   ]}
                 />
-                <div className="absolute inset-0 bg-black/20" />
-                <div className="absolute inset-x-0 bottom-0 h-[46%] bg-gradient-to-t from-black/28 to-transparent" />
+                <div className="absolute inset-0 bg-[#3a0420]/25" />
+                <div className="absolute inset-x-0 bottom-0 h-[46%] bg-gradient-to-t from-[#2a0317]/35 to-transparent" />
                 <PanelText tone="date">
                   for
                   <br />
@@ -70,7 +70,7 @@ function Panel({
 }) {
   return (
     <div
-      className={`relative isolate overflow-hidden rounded-[clamp(34px,4.25vw,74px)] bg-[#6043f4] ${className}`}
+      className={`relative isolate overflow-hidden rounded-[clamp(34px,4.25vw,74px)] bg-[#f7c6dd] ${className}`}
     >
       {children}
     </div>
