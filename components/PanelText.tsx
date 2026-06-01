@@ -3,12 +3,11 @@
 import { motion, type Variants } from "framer-motion";
 
 const copy: Variants = {
-  hidden: { opacity: 0, y: 16, filter: "blur(8px)" },
+  hidden: { opacity: 0, y: 12 },
   show: {
     opacity: 1,
     y: 0,
-    filter: "blur(0px)",
-    transition: { duration: 0.72, ease: [0.22, 1, 0.36, 1] },
+    transition: { duration: 0.58, ease: [0.22, 1, 0.36, 1] },
   },
 };
 

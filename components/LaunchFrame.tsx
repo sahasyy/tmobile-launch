@@ -17,7 +17,7 @@ export function LaunchFrame() {
           <div className="grid h-full w-full grid-cols-[1.05fr_0.95fr] gap-[clamp(24px,2.35vw,38px)] max-md:grid-cols-1">
             <Panel className="min-h-0 max-md:min-h-[56dvh]">
               <SandBeamShader />
-              <div className="absolute inset-x-0 bottom-0 h-[46%] bg-gradient-to-t from-[#00168f]/72 via-[#00168f]/26 to-transparent" />
+              <div className="absolute inset-x-0 bottom-0 h-[56%] bg-gradient-to-t from-[#0011a8]/90 via-[#001cff]/50 to-transparent" />
               <PanelText tone="large">
                 I&rsquo;m joining
                 <br />

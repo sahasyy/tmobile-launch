@@ -55,34 +55,38 @@ void main() {
   float warp = fbm(p * 2.8 + vec2(t * 0.10, -t * 0.07));
   vec2 wuv = uv + vec2((warp - 0.5) * 0.045, (warp - 0.5) * 0.032);
 
-  float broadA = ribbon(wuv, 0.05 + 0.06 * sin(t * 0.33), 0.78, 0.018, t);
-  float broadB = ribbon(wuv, 0.94 + 0.05 * cos(t * 0.27), -0.92, 0.030, -t * 0.72);
-  float sharp = ribbon(wuv, 0.18 + 0.05 * sin(t * 0.2), 0.72, 0.0028, t * 1.45);
+  float broadA = ribbon(wuv, 0.05 + 0.06 * sin(t * 0.33), 0.78, 0.012, t);
+  float broadB = ribbon(wuv, 0.94 + 0.05 * cos(t * 0.27), -0.92, 0.021, -t * 0.72);
+  float sharp = ribbon(wuv, 0.18 + 0.05 * sin(t * 0.2), 0.72, 0.0015, t * 1.45);
   float vertical = exp(-pow((wuv.x - (0.52 + 0.08 * sin(t * 0.21))) / 0.13, 2.0));
 
   float beams = clamp(broadA * 0.95 + broadB * 0.82 + sharp * 1.6 + vertical * 0.38, 0.0, 1.0);
-  float powder = fbm(p * 11.0 + vec2(-t * 0.35, t * 0.18));
+  float powder = fbm(p * 12.5 + vec2(-t * 0.35, t * 0.18));
   float sand = hash(gl_FragCoord.xy + floor(uTime * 9.0));
-  float sandMask = smoothstep(0.08, 0.86, beams + powder * 0.26);
+  float salt = hash(gl_FragCoord.xy * 0.73 + floor(uTime * 7.0));
+  float edge = smoothstep(0.05, 0.62, beams + powder * 0.28);
+  float core = smoothstep(0.32, 0.92, beams + powder * 0.18);
 
   vec3 blue = vec3(0.000, 0.055, 0.980);
   vec3 cobalt = vec3(0.000, 0.190, 1.000);
-  vec3 ice = vec3(0.780, 0.950, 1.000);
+  vec3 ice = vec3(0.850, 0.965, 1.000);
   vec3 white = vec3(1.000);
 
   vec3 color = mix(blue, cobalt, smoothstep(0.05, 0.95, warp) * 0.28);
-  color = mix(color, ice, beams * 0.62);
-  color = mix(color, white, smoothstep(0.44, 0.98, beams) * 0.72);
+  color = mix(color, ice, edge * 0.38);
+  color = mix(color, white, core * 0.88);
 
-  float speckles = (sand - 0.5) * (0.18 + sandMask * 0.55);
+  float speckles = (sand - 0.5) * (0.22 + edge * 0.72);
   color += speckles;
 
-  float whiteDust = step(0.76, sand) * sandMask * 0.42;
+  float whiteDust = step(0.64, sand) * edge * 0.54;
+  float blueDust = step(0.83, salt) * (1.0 - core) * 0.16;
   color = mix(color, white, whiteDust);
+  color = mix(color, vec3(0.0, 0.04, 0.80), blueDust);
 
   float shade = smoothstep(0.0, 0.55, uv.x) * smoothstep(1.0, 0.52, uv.y);
   color *= 0.90 + shade * 0.16;
-  gl_FragColor = vec4(color, 1.0);
+  gl_FragColor = vec4(clamp(color, 0.0, 1.0), 1.0);
 }
 `;
 
@@ -176,12 +180,13 @@ export function SandBeamShader() {
 
   return (
     <>
-      <div className="sand-beam-fallback absolute inset-0" aria-hidden="true" />
+      <div className="sand-beam-fallback absolute inset-0 z-0" aria-hidden="true" />
       <canvas
         ref={canvasRef}
-        className="absolute inset-0 h-full w-full"
+        className="absolute inset-0 z-0 h-full w-full"
         aria-hidden="true"
       />
+      <div className="sand-beam-grain absolute inset-0 z-10" aria-hidden="true" />
     </>
   );
 }
