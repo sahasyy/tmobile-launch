@@ -36,18 +36,24 @@ export function LaunchFrame() {
                 </PanelText>
               </Panel>
 
-              <Panel className="bg-[#3a0420]">
+              <Panel className="bg-[#fbeef5]">
                 <GradientBackground
                   className="absolute inset-0"
+                  colorBack="hsl(330, 60%, 97%)"
+                  shape="blob"
+                  softness={0.78}
+                  intensity={0.5}
+                  noise={0.22}
+                  scale={1.5}
+                  offsetX={0.42}
+                  offsetY={-0.42}
                   colors={[
+                    "hsl(335, 70%, 90%)",
+                    "hsl(332, 80%, 78%)",
                     "hsl(327, 100%, 44%)",
-                    "hsl(338, 88%, 62%)",
-                    "hsl(348, 92%, 74%)",
                   ]}
                 />
-                <div className="absolute inset-0 bg-[#3a0420]/25" />
-                <div className="absolute inset-x-0 bottom-0 h-[46%] bg-gradient-to-t from-[#2a0317]/35 to-transparent" />
-                <PanelText tone="date">
+                <PanelText tone="date" variant="dark">
                   for
                   <br />
                   Summer 2026
