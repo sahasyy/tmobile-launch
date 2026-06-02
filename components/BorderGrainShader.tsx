@@ -63,41 +63,50 @@ void main() {
   );
   float flow = fbm(p * 1.9 + 2.4 * r);
 
-  // --- Moving specular sheen (the liquid-chrome glint) ---
-  float band = p.x * 0.9 + p.y * 0.6;
-  float sheenCoord = band * 3.0 + (flow - 0.5) * 2.6 - uPhase;
-  float sheen = pow(0.5 + 0.5 * sin(sheenCoord), 6.0);
-  float sheen2 = pow(0.5 + 0.5 * sin(band * 1.7 - flow * 1.8 - uPhase * 0.6), 10.0);
-  float spec = clamp(sheen * 0.8 + sheen2 * 0.6, 0.0, 1.0);
+  // --- Pronounced liquid sheen sweeping across (the chrome highlight) ---
+  // Diagonal sweep coordinate, rippled by the flow so the band is wavy not straight.
+  float band = p.x * 0.85 + p.y * 0.6 + (flow - 0.5) * 1.3;
+  // Two traveling waves at different speeds for a layered metallic shimmer.
+  float w1 = sin(band * 6.2831 - uPhase * 1.6);
+  float w2 = sin(band * 12.566 - uPhase * 2.4 + flow * 3.0);
 
-  // --- Palette: white-dominant, light pink flowing, magenta filament only ---
-  vec3 white   = vec3(0.985, 0.980, 0.985);
-  vec3 silver  = vec3(0.945, 0.930, 0.945);
-  vec3 ltPink  = vec3(0.995, 0.870, 0.930);
-  vec3 pinkMid = vec3(0.985, 0.640, 0.820);
-  vec3 magenta = vec3(0.886, 0.000, 0.455);
-  vec3 hi      = vec3(1.000, 0.995, 1.000);
+  // Broad pink tint mass riding the slow wave (the colored body of the liquid).
+  float pinkMass = clamp(0.45 + 0.55 * w1 + (flow - 0.5) * 0.7, 0.0, 1.0);
 
-  vec3 col = mix(white, silver, smoothstep(0.35, 0.75, flow) * 0.45);
-  col = mix(col, ltPink, smoothstep(0.30, 0.85, flow) * 0.55);
-  col = mix(col, pinkMid, smoothstep(0.55, 0.95, flow + spec * 0.3) * 0.30);
+  // Sharp bright sheen crests (narrow, high-contrast — reads as moving chrome).
+  float crest1 = pow(max(0.0, w1), 3.0);
+  float crest2 = pow(max(0.0, w2), 8.0);
+  float spec = clamp(crest1 * 0.85 + crest2 * 0.6, 0.0, 1.0);
 
-  // thin magenta filament riding the sheen crest
-  float filament = smoothstep(0.82, 0.97, spec) * smoothstep(0.45, 0.80, flow);
-  col = mix(col, magenta, filament * 0.35);
+  // --- Palette: luminous white/light-pink, rich pink flow, magenta accent ---
+  vec3 paper   = vec3(1.000, 0.972, 0.984); // near-white base
+  vec3 ltPink  = vec3(1.000, 0.815, 0.900); // light pink
+  vec3 pink    = vec3(0.980, 0.520, 0.755); // mid pink (the flow)
+  vec3 deep    = vec3(0.915, 0.230, 0.600); // deep pink (wave troughs)
+  vec3 magenta = vec3(0.886, 0.000, 0.455); // #E20074 accent
+  vec3 hi      = vec3(1.000, 0.999, 1.000); // specular white
 
-  // specular highlight last -> bright white core with magenta on its flanks
-  col = mix(col, hi, spec * 0.55);
+  // Base white -> light pink -> rich pink bands that clearly flow through.
+  vec3 col = mix(paper, ltPink, smoothstep(0.10, 0.6, flow));
+  col = mix(col, pink, smoothstep(0.32, 0.82, pinkMass) * 0.85);
+  col = mix(col, deep, smoothstep(0.60, 0.95, pinkMass) * 0.6);
 
-  // --- Grain (matched to the GrainGradient feel; cleaner in highlights) ---
+  // Bold magenta filament riding the sharp sheen crest (visible thin accent).
+  float filament = crest2 * smoothstep(0.4, 0.8, pinkMass);
+  col = mix(col, magenta, filament * 0.6);
+
+  // Specular sheen last — a bright luminous glint that clearly sweeps across.
+  col = mix(col, hi, spec * 0.8);
+
+  // --- Grain (GrainGradient feel; cleaner in the bright sheen) ---
   float fineGrain = hash(gl_FragCoord.xy + vec2(floor(t * 3.0)));
   float softSpeckle = noise(p * 140.0);
-  float grain = (fineGrain - 0.5) * 0.055 + (softSpeckle - 0.5) * 0.040;
+  float grain = (fineGrain - 0.5) * 0.07 + (softSpeckle - 0.5) * 0.05;
   col += grain * (1.0 - spec * 0.5);
 
   // subtle all-around vignette
   float edge = smoothstep(0.0, 0.5, uv.y) * smoothstep(1.0, 0.5, uv.y);
-  col *= 0.97 + edge * 0.05;
+  col *= 0.96 + edge * 0.06;
 
   gl_FragColor = vec4(clamp(col, 0.0, 1.0), 1.0);
 }
@@ -115,16 +124,8 @@ function compile(gl: WebGLRenderingContext, type: number, src: string) {
   return shader;
 }
 
-export function BorderGrainShader({
-  onPhase,
-}: {
-  /** Called each frame with the sheen's current rotation angle (deg), derived
-   *  from the same clock as the shader so a highlight ring can stay synced. */
-  onPhase?: (angleDeg: number) => void;
-}) {
+export function BorderGrainShader() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const onPhaseRef = useRef(onPhase);
-  onPhaseRef.current = onPhase;
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -186,16 +187,11 @@ export function BorderGrainShader({
     resize();
 
     const draw = (t: number) => {
-      const phase = t * SHEEN_SPEED;
       resize();
       gl.uniform2f(uRes, canvas.width, canvas.height);
       gl.uniform1f(uTime, t);
-      gl.uniform1f(uPhase, phase);
+      gl.uniform1f(uPhase, t * SHEEN_SPEED);
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
-      // Report a rotation angle from the same clock so the ring stays locked.
-      if (onPhaseRef.current) {
-        onPhaseRef.current(((phase * 180) / Math.PI) % 360);
-      }
     };
 
     if (reduced) {
