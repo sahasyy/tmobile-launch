@@ -39,45 +39,80 @@ float fbm(vec2 p){
 void main(){
   vec2 uv = gl_FragCoord.xy / uRes.xy;
   vec2 c = uv - 0.5;
-  float r = length(c);
-  float t = uTime * 0.12;
+  float t = uTime * 0.14;
 
-  // Domain-warped fbm -> billowing cloud
-  vec2 q = vec2(fbm(c*2.6 + vec2(t, -t*0.7)), fbm(c*2.6 + vec2(4.3, 1.7) - t*0.5));
-  float cloud = fbm(c*3.2 + q*1.6 + vec2(-t*0.4, t*0.3));
-  cloud = cloud*0.5 + 0.5;
+  // --- Slowly rotate the whole sampling space so the cloud spins ---
+  float spin = uTime * 0.16;
+  float cs = cos(spin), sn = sin(spin);
+  vec2 cr = mat2(cs, -sn, sn, cs) * c;
 
-  // Brand cloud palette
+  float r = length(cr);
+  float ang = atan(cr.y, cr.x);
+
+  // --- Domain-warped fbm field (the cloud body), advected over time so the
+  //     internal structure churns and drifts as it rotates ---
+  vec2 q = vec2(
+    fbm(cr * 2.6 + vec2(t * 1.1, -t * 0.7)),
+    fbm(cr * 2.6 + vec2(4.3, 1.7) - t * 0.5)
+  );
+  float cloud = fbm(cr * 3.2 + q * 1.7 + vec2(-t * 0.5, t * 0.35));
+  cloud = cloud * 0.5 + 0.5;
+
+  // --- Irregular cloud DENSITY field: combine the body field, the hue drift
+  //     and angular lobes into one mass that is dense (magenta) in organic
+  //     pockets and light (blush/white) elsewhere. The shape is read from this
+  //     density, and because everything is advected + rotated, the masses
+  //     churn and the silhouette morphs as it turns. ---
+  float lobes =
+      0.5 * fbm(vec2(ang * 1.6 + spin, t * 0.9))
+    + 0.5 * fbm(vec2(cos(ang) * 2.4, sin(ang) * 2.4) + t * 0.8 + q * 1.3);
+
+  float hueField = fbm(cr * 2.9 + vec2(t * 0.9, -t * 1.2) + q * 1.1);
+  hueField = hueField * 0.5 + 0.5;
+
+  // density: high = deep cloud (magenta), low = airy (blush/white). Keep plenty
+  // of MID-RANGE variation so the cloud has visible pink billows + white wisps
+  // (not a flat magenta blob).
+  float density = cloud * 0.62 + hueField * 0.5 + (lobes - 0.5) * 0.34;
+  // wobbly radial bias -> irregular silhouette
+  float falloff = smoothstep(0.92 + 0.16 * (lobes * 2.0 - 1.0), 0.04, r);
+  density = clamp(density * (0.6 + 0.6 * falloff), 0.0, 1.0);
+  density = smoothstep(0.16, 0.96, density);   // wide range -> tonal variety
+
+  // Secondary detail field for inner billows / wisps
+  float billow = fbm(cr * 5.2 + vec2(-t * 0.8, t * 0.6) + q * 1.5);
+
+  // Brand cloud palette (saturated)
   vec3 white  = vec3(1.000, 0.992, 0.996);
-  vec3 blush  = vec3(1.000, 0.870, 0.930);
-  vec3 pink   = vec3(0.985, 0.620, 0.800);
+  vec3 blush  = vec3(1.000, 0.760, 0.880);
+  vec3 pink   = vec3(0.962, 0.300, 0.640);
   vec3 magenta= vec3(0.886, 0.000, 0.455);
 
-  // Layered tints driven by the cloud field — richer, more colourful clouds
-  vec3 col = blush;
-  col = mix(col, pink,  smoothstep(0.28, 0.74, cloud) * 0.92);
-  col = mix(col, magenta, smoothstep(0.52, 0.95, cloud) * 0.78 * (0.55 + 0.45*q.x));
-  // Bright blush highlights where the cloud thins
-  col = mix(col, blush, smoothstep(0.62, 0.18, cloud) * 0.5);
+  // Opaque, full-bleed cloud: white wisps -> blush -> pink -> magenta pockets.
+  vec3 col = mix(white, blush, smoothstep(0.0, 0.32, density));
+  col = mix(col, pink, smoothstep(0.26, 0.66, density));
+  col = mix(col, magenta, smoothstep(0.56, 0.95, density) * (0.85 + 0.15 * q.x));
 
-  // Soft round glow falloff toward the edges (so it reads as an orb/cloud)
-  float glow = smoothstep(0.66, 0.10, r);
-  // bright drifting hotspot — keeps a luminous core without washing it all white
-  vec2 hot = vec2(0.05*sin(t*1.3), 0.04*cos(t));
-  float bloom = smoothstep(0.34, 0.0, length(c - hot));
-  // edge fades to white page; interior keeps its colour
-  col = mix(white, col, glow);
-  col = mix(col, mix(white, blush, 0.5), bloom * 0.55);
+  // Inner billows: lift lighter pink/white into the magenta so it reads cloudy
+  col = mix(col, mix(pink, white, 0.5), smoothstep(0.55, 0.95, billow) * 0.35 * density);
+  // soft dark magenta creases where billow dips
+  col = mix(col, magenta, smoothstep(0.45, 0.05, billow) * 0.25 * density);
+
+  // Drifting luminous highlight
+  vec2 hot = vec2(0.14 * sin(t * 1.1), 0.1 * cos(t));
+  float bloom = smoothstep(0.34, 0.0, length(cr - hot));
+  col = mix(col, white, bloom * 0.4 * (1.0 - density * 0.6));
 
   // Fine grain (the "noise" texture)
-  float g = hash(gl_FragCoord.xy + floor(uTime*9.0));
-  col += (g - 0.5) * 0.06;
-  float g2 = noise(uv * 220.0 + t*7.0);
+  float g = hash(gl_FragCoord.xy + floor(uTime * 9.0));
+  col += (g - 0.5) * 0.055;
+  float g2 = noise(uv * 220.0 + t * 7.0);
   col += (g2 - 0.5) * 0.04;
 
-  // Alpha: fully opaque in the cloud body, feathering to transparent at the rim
-  float alpha = smoothstep(0.5, 0.16, r);
-  alpha = clamp(alpha + glow * 0.15, 0.0, 1.0);
+  // Soft round alpha vignette: opaque cloud across the body, fading to
+  // transparent only near the corners so there is NO hard square edge while
+  // the canvas is small over the white screen.
+  float alpha = smoothstep(0.72, 0.4, r);
 
   gl_FragColor = vec4(clamp(col, 0.0, 1.0), alpha);
 }
