@@ -18,13 +18,6 @@ body {
   font-family: "Erode", serif;
 }
 
-/* Onboarding intro: hide the revealable layers before React mounts so there
-   is no flash of the final layout for first-time visitors. Cleared once the
-   intro completes (data-intro removed) or skipped entirely. */
-html[data-intro="play"] [data-intro-hidden] {
-  opacity: 0;
-}
-
 .sand-beam-fallback {
   overflow: hidden;
   background:
