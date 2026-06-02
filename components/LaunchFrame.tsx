@@ -1,5 +1,7 @@
 "use client";
 
+import { useCallback, useRef } from "react";
+
 import { GradientBackground } from "@/components/ui/paper-design-shader-background";
 
 import { BorderGrainShader } from "./BorderGrainShader";
@@ -8,10 +10,27 @@ import { PanelText } from "./PanelText";
 import { SandBeamShader } from "./SandBeamShader";
 
 export function LaunchFrame() {
+  // The highlight ring's rotation is driven by the SAME clock as the shader
+  // sheen (via onPhase) so the bubble-edge glow stays locked to the sheen.
+  const ringRef = useRef<HTMLDivElement | null>(null);
+  const handlePhase = useCallback((angleDeg: number) => {
+    const el = ringRef.current;
+    if (el) el.style.transform = `rotate(${angleDeg}deg)`;
+  }, []);
+
   return (
     <section className="relative min-h-dvh w-full bg-magenta md:h-full">
       <div className="relative h-full w-full overflow-hidden bg-magenta p-[clamp(12px,1.3vw,22px)]">
-        <BorderGrainShader />
+        <BorderGrainShader onPhase={handlePhase} />
+
+        {/* Highlight ring hugging the bubble edge; rotation set by the shader's
+            clock so the glow travels with the sheen. The opaque white bubble
+            (next sibling) covers its interior, leaving only the edge glow. */}
+        <div
+          ref={ringRef}
+          aria-hidden="true"
+          className="sheen-ring pointer-events-none absolute inset-[clamp(12px,1.3vw,22px)] rounded-[clamp(48px,5.4vw,88px)]"
+        />
 
         <div className="relative h-full w-full overflow-hidden rounded-[clamp(48px,5.4vw,88px)] bg-white p-[clamp(24px,2.35vw,38px)]">
           <div className="grid h-full w-full grid-cols-[1.05fr_0.95fr] gap-[clamp(24px,2.35vw,38px)] max-md:grid-cols-1">

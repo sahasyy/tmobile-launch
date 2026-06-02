@@ -1,6 +1,12 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+
+// Shared sweep speed. The shader advances its specular sheen by `uPhase` and the
+// JS reports a rotation angle derived from the SAME clock+speed, so the bubble
+// highlight ring stays locked to the sheen (no drift, no GPU readback).
+const SHEEN_SPEED = 0.5; // radians/sec of sheen phase
+
 const VERT = `
 attribute vec2 aPos;
 void main() {
@@ -12,8 +18,7 @@ const FRAG = `
 precision highp float;
 uniform vec2 uRes;
 uniform float uTime;
-uniform vec2 uMotion;
-uniform float uBright;
+uniform float uPhase;
 
 float hash(vec2 p) {
   return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453123);
@@ -45,35 +50,56 @@ void main() {
   vec2 uv = gl_FragCoord.xy / uRes.xy;
   float aspect = uRes.x / uRes.y;
   vec2 p = vec2(uv.x * aspect, uv.y);
+  float t = uTime;
 
-  vec2 drift = vec2(uTime * 0.018, -uTime * 0.012) + uMotion * 0.035;
-  float cloud = fbm(p * 2.1 + drift);
-  float fiber = fbm(vec2(p.x * 9.5 + uTime * 0.025, p.y * 36.0 - uTime * 0.018));
-  float softSpeckle = noise(p * 145.0 + drift * 7.0);
-  float fineGrain = hash(gl_FragCoord.xy + vec2(floor(uTime * 3.0)));
+  // --- Liquid base: domain-warped fbm (flowing, marbled metal body) ---
+  vec2 q = vec2(
+    fbm(p * 1.6 + vec2(0.0, t * 0.05)),
+    fbm(p * 1.6 + vec2(5.2, -t * 0.04))
+  );
+  vec2 r = vec2(
+    fbm(p * 1.6 + 3.0 * q + vec2(1.7, t * 0.07)),
+    fbm(p * 1.6 + 3.0 * q + vec2(8.3, -t * 0.06))
+  );
+  float flow = fbm(p * 1.9 + 2.4 * r);
 
-  // Pink frame: rose-forward, magenta used only as a restrained accent (not loud).
-  vec3 tmo = vec3(0.886, 0.000, 0.455);
-  vec3 rose = vec3(0.985, 0.475, 0.745);
-  vec3 pink = vec3(1.000, 0.640, 0.830);
-  vec3 blush = vec3(1.000, 0.820, 0.910);
-  vec3 paper = vec3(1.000, 0.955, 0.980);
-  vec3 petal = vec3(1.000, 0.720, 0.860);
+  // --- Moving specular sheen (the liquid-chrome glint) ---
+  float band = p.x * 0.9 + p.y * 0.6;
+  float sheenCoord = band * 3.0 + (flow - 0.5) * 2.6 - uPhase;
+  float sheen = pow(0.5 + 0.5 * sin(sheenCoord), 6.0);
+  float sheen2 = pow(0.5 + 0.5 * sin(band * 1.7 - flow * 1.8 - uPhase * 0.6), 10.0);
+  float spec = clamp(sheen * 0.8 + sheen2 * 0.6, 0.0, 1.0);
 
-  // Base is rose/pink; magenta only seeps into the deepest cloud pockets.
-  vec3 col = mix(pink, rose, smoothstep(0.18, 0.86, cloud) * 0.70);
-  col = mix(col, tmo, smoothstep(0.74, 0.97, cloud) * 0.30);
-  col = mix(col, petal, smoothstep(0.38, 0.82, fiber) * 0.18);
-  col = mix(col, blush, smoothstep(0.60, 0.96, cloud + fiber * 0.45) * 0.30);
-  col = mix(col, paper, smoothstep(0.82, 1.00, fiber) * 0.20);
+  // --- Palette: white-dominant, light pink flowing, magenta filament only ---
+  vec3 white   = vec3(0.985, 0.980, 0.985);
+  vec3 silver  = vec3(0.945, 0.930, 0.945);
+  vec3 ltPink  = vec3(0.995, 0.870, 0.930);
+  vec3 pinkMid = vec3(0.985, 0.640, 0.820);
+  vec3 magenta = vec3(0.886, 0.000, 0.455);
+  vec3 hi      = vec3(1.000, 0.995, 1.000);
 
-  float grain = (fineGrain - 0.5) * 0.085 + (softSpeckle - 0.5) * 0.055;
-  col += grain * (0.92 + uBright * 0.18);
+  vec3 col = mix(white, silver, smoothstep(0.35, 0.75, flow) * 0.45);
+  col = mix(col, ltPink, smoothstep(0.30, 0.85, flow) * 0.55);
+  col = mix(col, pinkMid, smoothstep(0.55, 0.95, flow + spec * 0.3) * 0.30);
 
-  float edgeShade = smoothstep(0.0, 0.55, uv.y) * smoothstep(1.0, 0.45, uv.y);
-  col *= 0.95 + edgeShade * 0.08;
+  // thin magenta filament riding the sheen crest
+  float filament = smoothstep(0.82, 0.97, spec) * smoothstep(0.45, 0.80, flow);
+  col = mix(col, magenta, filament * 0.35);
 
-  gl_FragColor = vec4(col, 1.0);
+  // specular highlight last -> bright white core with magenta on its flanks
+  col = mix(col, hi, spec * 0.55);
+
+  // --- Grain (matched to the GrainGradient feel; cleaner in highlights) ---
+  float fineGrain = hash(gl_FragCoord.xy + vec2(floor(t * 3.0)));
+  float softSpeckle = noise(p * 140.0);
+  float grain = (fineGrain - 0.5) * 0.055 + (softSpeckle - 0.5) * 0.040;
+  col += grain * (1.0 - spec * 0.5);
+
+  // subtle all-around vignette
+  float edge = smoothstep(0.0, 0.5, uv.y) * smoothstep(1.0, 0.5, uv.y);
+  col *= 0.97 + edge * 0.05;
+
+  gl_FragColor = vec4(clamp(col, 0.0, 1.0), 1.0);
 }
 `;
 
@@ -89,8 +115,16 @@ function compile(gl: WebGLRenderingContext, type: number, src: string) {
   return shader;
 }
 
-export function BorderGrainShader() {
+export function BorderGrainShader({
+  onPhase,
+}: {
+  /** Called each frame with the sheen's current rotation angle (deg), derived
+   *  from the same clock as the shader so a highlight ring can stay synced. */
+  onPhase?: (angleDeg: number) => void;
+}) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const onPhaseRef = useRef(onPhase);
+  onPhaseRef.current = onPhase;
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -102,6 +136,10 @@ export function BorderGrainShader() {
       premultipliedAlpha: false,
     });
     if (!gl) return;
+
+    const reduced = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
 
     const program = gl.createProgram()!;
     const vert = compile(gl, gl.VERTEX_SHADER, VERT);
@@ -125,12 +163,8 @@ export function BorderGrainShader() {
 
     const uRes = gl.getUniformLocation(program, "uRes");
     const uTime = gl.getUniformLocation(program, "uTime");
-    const uMotion = gl.getUniformLocation(program, "uMotion");
-    const uBright = gl.getUniformLocation(program, "uBright");
+    const uPhase = gl.getUniformLocation(program, "uPhase");
 
-    let smX = 0;
-    let smY = 0;
-    let smB = 0.5;
     let raf = 0;
     const start = performance.now();
 
@@ -151,22 +185,29 @@ export function BorderGrainShader() {
     observer.observe(canvas);
     resize();
 
-    const render = () => {
-      const motion = { x: 0, y: 0, brightness: 0.5 };
-      smX += (motion.x - smX) * 0.045;
-      smY += (motion.y - smY) * 0.045;
-      smB += (motion.brightness - smB) * 0.045;
-
+    const draw = (t: number) => {
+      const phase = t * SHEEN_SPEED;
       resize();
       gl.uniform2f(uRes, canvas.width, canvas.height);
-      gl.uniform1f(uTime, (performance.now() - start) / 1000);
-      gl.uniform2f(uMotion, smX, -smY);
-      gl.uniform1f(uBright, smB);
+      gl.uniform1f(uTime, t);
+      gl.uniform1f(uPhase, phase);
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
-      raf = requestAnimationFrame(render);
+      // Report a rotation angle from the same clock so the ring stays locked.
+      if (onPhaseRef.current) {
+        onPhaseRef.current(((phase * 180) / Math.PI) % 360);
+      }
     };
 
-    raf = requestAnimationFrame(render);
+    if (reduced) {
+      // Static still — render one frame, no animation loop.
+      draw(8);
+    } else {
+      const render = () => {
+        draw((performance.now() - start) / 1000);
+        raf = requestAnimationFrame(render);
+      };
+      raf = requestAnimationFrame(render);
+    }
 
     return () => {
       cancelAnimationFrame(raf);
