@@ -73,15 +73,14 @@ export function LaunchFrame() {
         {showOverlay && <IntroOverlay key="intro" onDone={finishIntro} />}
       </AnimatePresence>
 
-      <section className="relative min-h-dvh w-full bg-[#f2f3f7] p-[clamp(12px,2.1vw,36px)] md:h-full">
+      <section className="relative min-h-dvh w-full bg-magenta md:h-full">
         <div className="relative h-full w-full overflow-hidden bg-magenta p-[clamp(26px,2.7vw,44px)]">
           <BorderGrainShader />
 
-          {/* Inner panel area — transparent, fades in first. No white border:
-              the pink grain frame is the only border; panels sit directly inside it. */}
+          {/* White inner background — fades in first. */}
           <motion.div
             data-intro-hidden
-            className="relative h-full w-full overflow-hidden"
+            className="relative h-full w-full overflow-hidden rounded-[clamp(48px,5.4vw,88px)] bg-white p-[clamp(24px,2.35vw,38px)]"
             initial={layerInitial}
             animate={layerAnimate(T.whiteStart)}
           >
