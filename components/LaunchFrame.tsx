@@ -1,5 +1,7 @@
 "use client";
 
+import Image from "next/image";
+
 import { GradientBackground } from "@/components/ui/paper-design-shader-background";
 
 import { BorderGrainShader } from "./BorderGrainShader";
@@ -20,8 +22,15 @@ export function LaunchFrame() {
               <div className="absolute inset-x-0 bottom-0 h-[64%] bg-gradient-to-t from-magenta-800/95 via-magenta-700/65 to-transparent" />
               <PanelText tone="large">
                 I&rsquo;m joining
-                <br />
-                T&#8209;Mobile
+                <Image
+                  src="/tmobile-logo.png"
+                  alt="T-Mobile"
+                  width={3561}
+                  height={720}
+                  priority
+                  unoptimized
+                  className="mt-[0.18em] block h-[clamp(40px,4.9vw,84px)] w-auto drop-shadow-[0_1px_14px_rgba(32,16,120,0.18)]"
+                />
               </PanelText>
             </Panel>
 
