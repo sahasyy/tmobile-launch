@@ -10,7 +10,7 @@ import { SandBeamShader } from "./SandBeamShader";
 export function LaunchFrame() {
   return (
     <section className="relative min-h-dvh w-full bg-magenta md:h-full">
-      <div className="relative h-full w-full overflow-hidden bg-magenta p-[clamp(26px,2.7vw,44px)]">
+      <div className="relative h-full w-full overflow-hidden bg-magenta p-[clamp(12px,1.3vw,22px)]">
         <BorderGrainShader />
 
         <div className="relative h-full w-full overflow-hidden rounded-[clamp(48px,5.4vw,88px)] bg-white p-[clamp(24px,2.35vw,38px)]">
