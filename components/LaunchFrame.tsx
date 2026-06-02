@@ -5,9 +5,7 @@ import Image from "next/image";
 import { GradientBackground } from "@/components/ui/paper-design-shader-background";
 
 import { BorderGrainShader } from "./BorderGrainShader";
-import { PanelGrainGradientShader } from "./PanelGrainGradientShader";
 import { PanelText } from "./PanelText";
-import { SandBeamShader } from "./SandBeamShader";
 
 export function LaunchFrame() {
   return (
@@ -17,9 +15,23 @@ export function LaunchFrame() {
 
         <div className="relative h-full w-full overflow-hidden rounded-[clamp(48px,5.4vw,88px)] bg-white p-[clamp(24px,2.35vw,38px)]">
           <div className="grid h-full w-full grid-cols-[1.05fr_0.95fr] gap-[clamp(24px,2.35vw,38px)] max-md:grid-cols-1">
-            <Panel className="min-h-0 max-md:min-h-[56dvh]">
-              <SandBeamShader />
-              <div className="absolute inset-x-0 bottom-0 h-[64%] bg-gradient-to-t from-magenta-800/95 via-magenta-700/65 to-transparent" />
+            <Panel className="min-h-0 bg-[#4a0026] max-md:min-h-[56dvh]">
+              <GradientBackground
+                className="absolute inset-0"
+                colorBack="hsl(330, 100%, 22%)"
+                shape="wave"
+                softness={0.9}
+                intensity={0.68}
+                noise={0.3}
+                scale={1.35}
+                speed={0.7}
+                colors={[
+                  "hsl(330, 100%, 50%)",
+                  "hsl(326, 85%, 66%)",
+                  "hsl(336, 95%, 84%)",
+                ]}
+              />
+              <div className="absolute inset-x-0 bottom-0 h-[64%] bg-gradient-to-t from-[#3a0420]/85 via-[#5a002f]/45 to-transparent" />
               <PanelText tone="large">
                 I&rsquo;m joining
                 <Image
@@ -35,9 +47,23 @@ export function LaunchFrame() {
             </Panel>
 
             <div className="grid min-h-0 grid-rows-2 gap-[clamp(24px,2.35vw,38px)] max-md:min-h-[76dvh]">
-              <Panel className="bg-[#f8f7f5]">
-                <PanelGrainGradientShader />
-                <div className="absolute inset-0 bg-white/10" />
+              <Panel className="bg-[#fbe6f1]">
+                <GradientBackground
+                  className="absolute inset-0"
+                  colorBack="hsl(330, 80%, 95%)"
+                  shape="wave"
+                  softness={0.92}
+                  intensity={0.6}
+                  noise={0.3}
+                  scale={1.2}
+                  speed={0.75}
+                  colors={[
+                    "hsl(330, 90%, 90%)",
+                    "hsl(326, 85%, 80%)",
+                    "hsl(332, 80%, 70%)",
+                  ]}
+                />
+                <div className="absolute inset-0 bg-white/25" />
                 <PanelText tone="short" variant="dark">
                   As a
                   <br />
