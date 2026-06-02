@@ -9,13 +9,13 @@ import { PanelText } from "./PanelText";
 
 export function LaunchFrame() {
   return (
-    <section className="relative min-h-dvh w-full bg-magenta md:h-full">
+    <section className="relative min-h-dvh w-full bg-magenta lg:h-full">
       <div className="relative h-full w-full overflow-hidden bg-magenta p-[clamp(12px,1.3vw,22px)]">
         <BorderGrainShader />
 
         <div className="relative h-full w-full overflow-hidden rounded-[clamp(48px,5.4vw,88px)] bg-white p-[clamp(24px,2.35vw,38px)]">
-          <div className="grid h-full w-full grid-cols-[1.05fr_0.95fr] gap-[clamp(24px,2.35vw,38px)] max-md:grid-cols-1">
-            <Panel className="min-h-0 bg-[#4a0026] max-md:min-h-[56dvh]">
+          <div className="grid h-full w-full grid-cols-1 gap-[clamp(20px,2.35vw,38px)] lg:grid-cols-[1.05fr_0.95fr]">
+            <Panel className="min-h-0 bg-[#4a0026] max-lg:min-h-[56dvh]">
               <GradientBackground
                 className="absolute inset-0"
                 colorBack="hsl(330, 100%, 22%)"
@@ -41,13 +41,13 @@ export function LaunchFrame() {
                   height={720}
                   priority
                   unoptimized
-                  className="mt-[0.18em] block h-[clamp(40px,4.9vw,84px)] w-auto drop-shadow-[0_1px_14px_rgba(32,16,120,0.18)]"
+                  className="mt-[0.22em] block h-[clamp(52px,7vw,132px)] w-auto drop-shadow-[0_2px_18px_rgba(32,16,120,0.2)]"
                 />
               </PanelText>
             </Panel>
 
-            <div className="grid min-h-0 grid-rows-2 gap-[clamp(24px,2.35vw,38px)] max-md:min-h-[76dvh]">
-              <Panel className="bg-[#fbe6f1]">
+            <div className="contents lg:grid lg:min-h-0 lg:grid-rows-2 lg:gap-[clamp(24px,2.35vw,38px)]">
+              <Panel className="bg-[#fbe6f1] max-lg:min-h-[40dvh]">
                 <GradientBackground
                   className="absolute inset-0"
                   colorBack="hsl(330, 80%, 95%)"
@@ -71,7 +71,7 @@ export function LaunchFrame() {
                 </PanelText>
               </Panel>
 
-              <Panel className="bg-[#5a002f]">
+              <Panel className="bg-[#5a002f] max-lg:min-h-[40dvh]">
                 <GradientBackground
                   className="absolute inset-0"
                   colorBack="hsl(327, 100%, 18%)"

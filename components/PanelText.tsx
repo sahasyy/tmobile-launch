@@ -20,10 +20,10 @@ interface Props {
 export function PanelText({ tone = "short", variant = "light", children }: Props) {
   const size =
     tone === "large"
-      ? "text-[clamp(52px,6.4vw,108px)] leading-[0.88]"
+      ? "text-[clamp(52px,7.6vw,150px)] leading-[0.9]"
       : tone === "date"
-        ? "text-[clamp(38px,4.4vw,78px)] leading-[0.9]"
-        : "text-[clamp(42px,4.9vw,82px)] leading-[0.9]";
+        ? "text-[clamp(38px,5.2vw,104px)] leading-[0.92]"
+        : "text-[clamp(42px,5.8vw,116px)] leading-[0.92]";
 
   const color =
     variant === "dark"
@@ -35,7 +35,7 @@ export function PanelText({ tone = "short", variant = "light", children }: Props
       initial="hidden"
       animate="show"
       variants={copy}
-      className="absolute inset-x-[clamp(28px,4.5vw,72px)] bottom-[clamp(28px,4.6vw,74px)] z-20"
+      className="absolute inset-x-[clamp(28px,4.5vw,86px)] bottom-[clamp(28px,4.6vw,88px)] z-20"
     >
       <div
         role="heading"
