@@ -4,14 +4,29 @@ import Image from "next/image";
 
 import { GradientBackground } from "@/components/ui/paper-design-shader-background";
 
-import { BorderGrainShader } from "./BorderGrainShader";
 import { PanelText } from "./PanelText";
 
 export function LaunchFrame() {
   return (
     <section className="relative min-h-dvh w-full bg-magenta lg:h-full">
-      <div className="relative h-full w-full overflow-hidden bg-magenta p-[clamp(12px,1.3vw,22px)]">
-        <BorderGrainShader />
+      <div className="relative h-full w-full overflow-hidden bg-[#e8006e] p-[clamp(12px,1.3vw,22px)]">
+        {/* Same GrainGradient wave as the panels — only the perimeter band
+            is visible since the white bubble covers the center. */}
+        <GradientBackground
+          className="absolute inset-0"
+          colorBack="hsl(332, 100%, 28%)"
+          shape="wave"
+          softness={0.85}
+          intensity={0.65}
+          noise={0.28}
+          scale={1.4}
+          speed={0.6}
+          colors={[
+            "hsl(328, 100%, 58%)",
+            "hsl(340, 90%, 72%)",
+            "hsl(318, 88%, 84%)",
+          ]}
+        />
 
         <div className="relative h-full w-full overflow-hidden rounded-[clamp(48px,5.4vw,88px)] bg-white p-[clamp(24px,2.35vw,38px)]">
           <div className="grid h-full w-full grid-cols-1 gap-[clamp(20px,2.35vw,38px)] lg:grid-cols-[1.05fr_0.95fr]">
