@@ -4,17 +4,30 @@ import Image from "next/image";
 
 import { GradientBackground } from "@/components/ui/paper-design-shader-background";
 
-import { BorderOrbitShader } from "./BorderOrbitShader";
 import { PanelText } from "./PanelText";
 
 export function LaunchFrame() {
   return (
     <section className="relative min-h-dvh w-full bg-magenta lg:h-full">
-      <div className="relative h-full w-full overflow-hidden bg-white p-[clamp(12px,1.3vw,22px)]">
-        {/* Orbiting glow: pure white border with a subtle magenta bloom that
-            travels clockwise around the perimeter. The white bubble covers the
-            center so the animation is fully isolated to the border band. */}
-        <BorderOrbitShader />
+      <div className="relative h-full w-full overflow-hidden bg-[#fce8f3] p-[clamp(12px,1.3vw,22px)]">
+        {/* Border-only wave: white/blush base with a single magenta filament
+            that sweeps through. The white bubble covers the center so the
+            animation is fully isolated to the perimeter band. */}
+        <GradientBackground
+          className="absolute inset-0"
+          colorBack="hsl(330, 60%, 97%)"
+          shape="wave"
+          softness={0.94}
+          intensity={0.55}
+          noise={0.22}
+          scale={1.5}
+          speed={0.5}
+          colors={[
+            "hsl(330, 40%, 96%)",
+            "hsl(334, 55%, 88%)",
+            "hsl(327, 100%, 44%)",
+          ]}
+        />
 
         <div className="relative h-full w-full overflow-hidden rounded-[clamp(48px,5.4vw,88px)] bg-white p-[clamp(24px,2.35vw,38px)]">
           <div className="grid h-full w-full grid-cols-1 gap-[clamp(20px,2.35vw,38px)] lg:grid-cols-[1.05fr_0.95fr]">
