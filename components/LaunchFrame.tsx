@@ -9,22 +9,22 @@ import { PanelText } from "./PanelText";
 export function LaunchFrame() {
   return (
     <section className="relative min-h-dvh w-full bg-magenta lg:h-full">
-      <div className="relative h-full w-full overflow-hidden bg-[#fce8f3] p-[clamp(12px,1.3vw,22px)]">
+      <div className="relative h-full w-full overflow-hidden bg-white p-[clamp(12px,1.3vw,22px)]">
         {/* Border-only wave: white/blush base with a single magenta filament
             that sweeps through. The white bubble covers the center so the
             animation is fully isolated to the perimeter band. */}
         <GradientBackground
           className="absolute inset-0"
-          colorBack="hsl(330, 60%, 97%)"
+          colorBack="hsl(0, 0%, 100%)"
           shape="wave"
-          softness={0.94}
-          intensity={0.55}
-          noise={0.22}
-          scale={1.5}
+          softness={0.95}
+          intensity={0.5}
+          noise={0.2}
+          scale={1.6}
           speed={0.5}
           colors={[
-            "hsl(330, 40%, 96%)",
-            "hsl(334, 55%, 88%)",
+            "hsl(0, 0%, 100%)",
+            "hsl(330, 60%, 95%)",
             "hsl(327, 100%, 44%)",
           ]}
         />
