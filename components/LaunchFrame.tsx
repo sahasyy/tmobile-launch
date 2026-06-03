@@ -9,22 +9,23 @@ import { PanelText } from "./PanelText";
 export function LaunchFrame() {
   return (
     <section className="relative min-h-dvh w-full bg-magenta lg:h-full">
-      <div className="relative h-full w-full overflow-hidden bg-[#e8006e] p-[clamp(12px,1.3vw,22px)]">
-        {/* Same GrainGradient wave as the panels — only the perimeter band
-            is visible since the white bubble covers the center. */}
+      <div className="relative h-full w-full overflow-hidden bg-[#fce8f3] p-[clamp(12px,1.3vw,22px)]">
+        {/* Border-only wave: white/blush base with a single magenta filament
+            that sweeps through. The white bubble covers the center so the
+            animation is fully isolated to the perimeter band. */}
         <GradientBackground
           className="absolute inset-0"
-          colorBack="hsl(332, 100%, 28%)"
+          colorBack="hsl(330, 60%, 97%)"
           shape="wave"
-          softness={0.85}
-          intensity={0.65}
-          noise={0.28}
-          scale={1.4}
-          speed={0.6}
+          softness={0.94}
+          intensity={0.55}
+          noise={0.22}
+          scale={1.5}
+          speed={0.5}
           colors={[
-            "hsl(328, 100%, 58%)",
-            "hsl(340, 90%, 72%)",
-            "hsl(318, 88%, 84%)",
+            "hsl(330, 40%, 96%)",
+            "hsl(334, 55%, 88%)",
+            "hsl(327, 100%, 44%)",
           ]}
         />
 
@@ -62,24 +63,24 @@ export function LaunchFrame() {
             </Panel>
 
             <div className="contents lg:grid lg:min-h-0 lg:grid-rows-2 lg:gap-[clamp(24px,2.35vw,38px)]">
-              <Panel className="bg-[#fbe6f1] max-lg:min-h-[40dvh]">
+              <Panel className="bg-[#3d0035] max-lg:min-h-[40dvh]">
                 <GradientBackground
                   className="absolute inset-0"
-                  colorBack="hsl(330, 80%, 95%)"
+                  colorBack="hsl(315, 100%, 14%)"
                   shape="wave"
-                  softness={0.92}
-                  intensity={0.6}
+                  softness={0.88}
+                  intensity={0.7}
                   noise={0.3}
-                  scale={1.2}
-                  speed={0.75}
+                  scale={1.3}
+                  speed={0.78}
                   colors={[
-                    "hsl(330, 90%, 90%)",
-                    "hsl(326, 85%, 80%)",
-                    "hsl(332, 80%, 70%)",
+                    "hsl(315, 90%, 42%)",
+                    "hsl(325, 82%, 58%)",
+                    "hsl(334, 88%, 76%)",
                   ]}
                 />
-                <div className="absolute inset-0 bg-white/25" />
-                <PanelText tone="short" variant="dark">
+                <div className="absolute inset-x-0 bottom-0 h-[55%] bg-gradient-to-t from-[#3d0035]/80 via-[#3d0035]/35 to-transparent" />
+                <PanelText tone="short">
                   As a
                   <br />
                   ML Engineer
