@@ -40,7 +40,7 @@ export function LaunchFrame() {
 
   return (
     <section
-      className={`relative min-h-svh w-full bg-magenta transition-opacity duration-[600ms] ease-out lg:h-full ${
+      className={`relative min-h-full w-full bg-magenta transition-opacity duration-[600ms] ease-out lg:h-full ${
         shown ? "opacity-100" : "opacity-0"
       }`}
     >

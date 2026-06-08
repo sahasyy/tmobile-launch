@@ -50,7 +50,10 @@ export function Confetti({ count = 80 }: { count?: number }) {
         return img.decode ? img.decode().catch(() => {}) : Promise.resolve();
       }),
     ).then(() => {
-      if (!cancelled) setPieces(makePieces(count, window.innerHeight));
+      if (cancelled) return;
+      // Fewer pieces on phones so the burst stays smooth alongside the shaders.
+      const n = window.innerWidth < 768 ? Math.min(count, 36) : count;
+      setPieces(makePieces(n, window.innerHeight));
     });
 
     const t = setTimeout(() => setDone(true), 8000); // unmount after the burst

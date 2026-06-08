@@ -24,6 +24,8 @@ interface GradientBackgroundProps {
   offsetY?: number;
   rotation?: number;
   speed?: number;
+  /** Cap on rendered pixels — keeps WebGL cheap on high-DPR phones. */
+  maxPixelCount?: number;
 }
 
 export function GradientBackground({
@@ -43,11 +45,15 @@ export function GradientBackground({
   offsetY = 0,
   rotation = 0,
   speed = 1,
+  // Cap rendered resolution so 4 shaders stay smooth on high-DPR phones.
+  // Grain hides the slight softening; desktop is barely affected.
+  maxPixelCount = 1_280_000,
 }: GradientBackgroundProps) {
   return (
     <div className={className}>
       <GrainGradient
         style={{ height: "100%", width: "100%" }}
+        maxPixelCount={maxPixelCount}
         colorBack={colorBack}
         softness={softness}
         intensity={intensity}
