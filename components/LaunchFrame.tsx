@@ -1,5 +1,7 @@
 "use client";
 
+import { useEffect, useState } from "react";
+
 import Image from "next/image";
 
 import { GradientBackground } from "@/components/ui/paper-design-shader-background";
@@ -28,8 +30,20 @@ const T = (() => {
 })();
 
 export function LaunchFrame() {
+  // Fade the whole frame in once on mount so the WebGL shaders, images, and
+  // font all resolve behind a single clean fade instead of popping in.
+  const [shown, setShown] = useState(false);
+  useEffect(() => {
+    const id = requestAnimationFrame(() => setShown(true));
+    return () => cancelAnimationFrame(id);
+  }, []);
+
   return (
-    <section className="relative min-h-dvh w-full bg-magenta lg:h-full">
+    <section
+      className={`relative min-h-dvh w-full bg-magenta transition-opacity duration-[600ms] ease-out lg:h-full ${
+        shown ? "opacity-100" : "opacity-0"
+      }`}
+    >
       <div className="relative h-full w-full overflow-hidden bg-white p-[clamp(22px,2.1vw,38px)]">
         {/* Border-only wave: white/blush base with a single magenta filament
             that sweeps through. The white bubble covers the center so the
