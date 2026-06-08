@@ -74,7 +74,7 @@ export function LaunchFrame() {
                 softness={0.9}
                 intensity={0.68}
                 noise={0.3}
-                scale={1.35}
+                scale={1.7}
                 rotation={0}
                 offsetX={-0.3}
                 offsetY={0.22}
@@ -180,7 +180,7 @@ export function LaunchFrame() {
                   softness={0.88}
                   intensity={0.72}
                   noise={0.32}
-                  scale={1.05}
+                  scale={1.7}
                   rotation={-50}
                   offsetX={0.18}
                   offsetY={0.4}
