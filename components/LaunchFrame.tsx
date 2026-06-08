@@ -44,7 +44,7 @@ export function LaunchFrame() {
         shown ? "opacity-100" : "opacity-0"
       }`}
     >
-      <div className="relative h-full w-full overflow-hidden bg-white p-[clamp(22px,2.1vw,38px)]">
+      <div className="relative h-auto w-full overflow-hidden bg-white p-[clamp(22px,2.1vw,38px)] lg:h-full">
         {/* Border-only wave: white/blush base with a single magenta filament
             that sweeps through. The white bubble covers the center so the
             animation is fully isolated to the perimeter band. */}
@@ -64,8 +64,8 @@ export function LaunchFrame() {
           ]}
         />
 
-        <div className="relative h-full w-full overflow-hidden rounded-[clamp(48px,5.4vw,88px)] bg-white p-[clamp(24px,2.35vw,38px)]">
-          <div className="grid h-full w-full grid-cols-1 gap-[clamp(20px,2.35vw,38px)] lg:grid-cols-[1.05fr_0.95fr]">
+        <div className="relative h-auto w-full overflow-hidden rounded-[clamp(48px,5.4vw,88px)] bg-white p-[clamp(24px,2.35vw,38px)] lg:h-full">
+          <div className="grid h-auto w-full grid-cols-1 gap-[clamp(20px,2.35vw,38px)] lg:h-full lg:grid-cols-[1.05fr_0.95fr]">
             <Panel className="min-h-0 bg-[#4a0026] max-lg:min-h-[56svh]">
               <GradientBackground
                 className="absolute inset-0"
