@@ -131,7 +131,7 @@ export function LaunchFrame() {
                   intensity={0.7}
                   noise={0.3}
                   scale={1.7}
-                  rotation={35}
+                  rotation={55}
                   offsetX={0.34}
                   offsetY={-0.28}
                   speed={1.6}
@@ -181,7 +181,7 @@ export function LaunchFrame() {
                   intensity={0.72}
                   noise={0.32}
                   scale={1.05}
-                  rotation={55}
+                  rotation={-50}
                   offsetX={0.18}
                   offsetY={0.4}
                   speed={1.3}
