@@ -35,7 +35,7 @@ function makePieces(count: number, viewportH: number): Piece[] {
 }
 
 /** One-shot confetti of the T-Mobile marks, raining down on first load. */
-export function Confetti({ count = 110 }: { count?: number }) {
+export function Confetti({ count = 80 }: { count?: number }) {
   const [pieces, setPieces] = useState<Piece[]>([]);
   const [done, setDone] = useState(false);
 
