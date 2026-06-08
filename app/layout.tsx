@@ -2,13 +2,20 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://tmobile.sahassharma.com"),
   title: "ML Intern @ T-Mobile",
-  description:
-    "I'm joining T-Mobile as an ML Engineer in Summer 2026. A camera-reactive hard launch.",
+  description: "I'm joining T-Mobile as an ML Engineer in Summer 2026.",
   openGraph: {
-    title: "ML Intern @ T-Mobile",
-    description: "I'm joining T-Mobile as an ML Engineer in Summer 2026.",
+    title: "I'm joining T-Mobile",
+    description: "As an ML Engineer · Summer 2026",
+    url: "https://tmobile.sahassharma.com",
+    siteName: "tmobile.sahassharma.com",
     type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "I'm joining T-Mobile",
+    description: "As an ML Engineer · Summer 2026",
   },
 };
 
