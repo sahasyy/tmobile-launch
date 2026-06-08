@@ -1,100 +1,136 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
+import { useEffect, useRef } from "react";
 
 const IMAGES = ["/tmobile.png", "/tmobile1.png", "/tmobile2.png"];
+const ASPECT = 888 / 800; // source image height / width
 
 interface Piece {
-  id: number;
-  src: string;
-  left: number; // vw %
-  size: number; // px
+  img: HTMLImageElement;
+  x: number; // start x (px)
+  drift: number; // horizontal drift (px)
+  size: number; // px (width)
   delay: number; // s
   duration: number; // s
-  drift: number; // px horizontal drift
-  rotate: number; // start rotation
-  spin: number; // total spin
-  fall: number; // px fall distance
+  angle: number; // start rotation (rad)
+  spin: number; // total spin (rad)
 }
 
-function makePieces(count: number, viewportH: number): Piece[] {
-  return Array.from({ length: count }, (_, i) => ({
-    id: i,
-    src: IMAGES[Math.floor(Math.random() * IMAGES.length)],
-    left: Math.random() * 100,
-    size: 18 + Math.random() * 30,
-    delay: Math.random() * 0.7,
-    duration: 2.8 + Math.random() * 2.2,
-    drift: (Math.random() - 0.5) * 260,
-    rotate: Math.random() * 360,
-    spin: Math.random() * 720 - 360,
-    fall: viewportH * 1.25,
-  }));
-}
+const easeIn = (t: number) => t * t; // gentle acceleration as they fall
 
-/** One-shot confetti of the T-Mobile marks, raining down on first load. */
-export function Confetti({ count = 80 }: { count?: number }) {
-  const [pieces, setPieces] = useState<Piece[]>([]);
-  const [done, setDone] = useState(false);
+/**
+ * One-shot confetti of the T-Mobile marks, drawn on a single canvas with
+ * requestAnimationFrame so dozens of pieces stay smooth on mobile (one
+ * composited layer instead of one DOM node + GPU layer per piece).
+ */
+export function Confetti({ count = 90 }: { count?: number }) {
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
   useEffect(() => {
-    let cancelled = false;
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
 
-    // Preload + decode all three images first so the burst starts in sync
-    // and animates smoothly instead of popping in as files arrive.
+    let raf = 0;
+    let stopped = false;
+    let pieces: Piece[] = [];
+    let start = 0;
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+    const resize = () => {
+      canvas.width = window.innerWidth * dpr;
+      canvas.height = window.innerHeight * dpr;
+      canvas.style.width = window.innerWidth + "px";
+      canvas.style.height = window.innerHeight + "px";
+    };
+
+    const build = (imgs: HTMLImageElement[]) => {
+      const w = window.innerWidth;
+      const n = w < 768 ? Math.min(count, 55) : count;
+      pieces = Array.from({ length: n }, () => ({
+        img: imgs[(Math.random() * imgs.length) | 0],
+        x: Math.random() * w,
+        drift: (Math.random() - 0.5) * 220,
+        size: 16 + Math.random() * 28,
+        delay: Math.random() * 0.8,
+        duration: 2.8 + Math.random() * 2.2,
+        angle: Math.random() * Math.PI * 2,
+        spin: (Math.random() - 0.5) * Math.PI * 6,
+      }));
+    };
+
+    const frame = (now: number) => {
+      if (stopped) return;
+      if (!start) start = now;
+      const t = (now - start) / 1000;
+      const w = window.innerWidth;
+      const h = window.innerHeight;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.save();
+      ctx.scale(dpr, dpr);
+
+      let alive = false;
+      for (const p of pieces) {
+        const local = t - p.delay;
+        if (local < 0) {
+          alive = true;
+          continue;
+        }
+        const prog = local / p.duration;
+        if (prog >= 1) continue;
+        alive = true;
+
+        const y = -p.size + easeIn(prog) * (h + p.size * 2);
+        const x = p.x + p.drift * prog;
+        const angle = p.angle + p.spin * prog;
+        const alpha =
+          prog < 0.06 ? prog / 0.06 : prog > 0.82 ? Math.max(0, 1 - (prog - 0.82) / 0.18) : 1;
+        const hgt = p.size * ASPECT;
+
+        ctx.save();
+        ctx.translate(x, y);
+        ctx.rotate(angle);
+        ctx.globalAlpha = alpha;
+        ctx.drawImage(p.img, -p.size / 2, -hgt / 2, p.size, hgt);
+        ctx.restore();
+      }
+      ctx.restore();
+
+      if (alive) raf = requestAnimationFrame(frame);
+    };
+
+    resize();
+    window.addEventListener("resize", resize);
+
     Promise.all(
-      IMAGES.map((src) => {
-        const img = new window.Image();
-        img.src = src;
-        return img.decode ? img.decode().catch(() => {}) : Promise.resolve();
-      }),
-    ).then(() => {
-      if (cancelled) return;
-      // Fewer pieces on phones so the burst stays smooth alongside the shaders.
-      const n = window.innerWidth < 768 ? Math.min(count, 36) : count;
-      setPieces(makePieces(n, window.innerHeight));
+      IMAGES.map(
+        (src) =>
+          new Promise<HTMLImageElement>((resolve) => {
+            const img = new window.Image();
+            img.onload = () => resolve(img);
+            img.onerror = () => resolve(img);
+            img.src = src;
+          }),
+      ),
+    ).then((imgs) => {
+      if (stopped) return;
+      build(imgs);
+      raf = requestAnimationFrame(frame);
     });
 
-    const t = setTimeout(() => setDone(true), 8000); // unmount after the burst
     return () => {
-      cancelled = true;
-      clearTimeout(t);
+      stopped = true;
+      cancelAnimationFrame(raf);
+      window.removeEventListener("resize", resize);
     };
   }, [count]);
 
-  if (done) return null;
-
   return (
-    <div className="pointer-events-none fixed inset-0 z-[70] overflow-hidden" aria-hidden>
-      {pieces.map((p) => (
-        <motion.img
-          key={p.id}
-          src={p.src}
-          alt=""
-          className="absolute object-contain"
-          style={{
-            left: `${p.left}%`,
-            top: "-12%",
-            width: p.size,
-            height: p.size,
-            willChange: "transform, opacity",
-          }}
-          initial={{ y: 0, x: 0, rotate: p.rotate, opacity: 0 }}
-          animate={{
-            y: p.fall,
-            x: p.drift,
-            rotate: p.rotate + p.spin,
-            opacity: [0, 1, 1, 0],
-          }}
-          transition={{
-            duration: p.duration,
-            delay: p.delay,
-            ease: "easeIn",
-            opacity: { duration: p.duration, delay: p.delay, times: [0, 0.06, 0.82, 1] },
-          }}
-        />
-      ))}
-    </div>
+    <canvas
+      ref={canvasRef}
+      aria-hidden
+      className="pointer-events-none fixed inset-0 z-[70]"
+    />
   );
 }
