@@ -78,7 +78,7 @@ export function LaunchFrame() {
                 rotation={-22}
                 offsetX={-0.3}
                 offsetY={0.22}
-                speed={0.62}
+                speed={0.88}
                 colors={[
                   "hsl(322, 100%, 46%)",
                   "hsl(318, 90%, 62%)",
@@ -134,7 +134,7 @@ export function LaunchFrame() {
                   rotation={28}
                   offsetX={0.34}
                   offsetY={-0.28}
-                  speed={1.15}
+                  speed={1.6}
                   colors={[
                     "hsl(330, 100%, 34%)",
                     "hsl(331, 88%, 48%)",
@@ -184,7 +184,7 @@ export function LaunchFrame() {
                   rotation={-48}
                   offsetX={0.18}
                   offsetY={0.4}
-                  speed={0.92}
+                  speed={1.3}
                   colors={[
                     "hsl(329, 100%, 52%)",
                     "hsl(328, 92%, 68%)",
