@@ -40,7 +40,7 @@ export function LaunchFrame() {
 
   return (
     <section
-      className={`relative min-h-dvh w-full bg-magenta transition-opacity duration-[600ms] ease-out lg:h-full ${
+      className={`relative min-h-svh w-full bg-magenta transition-opacity duration-[600ms] ease-out lg:h-full ${
         shown ? "opacity-100" : "opacity-0"
       }`}
     >
@@ -66,7 +66,7 @@ export function LaunchFrame() {
 
         <div className="relative h-full w-full overflow-hidden rounded-[clamp(48px,5.4vw,88px)] bg-white p-[clamp(24px,2.35vw,38px)]">
           <div className="grid h-full w-full grid-cols-1 gap-[clamp(20px,2.35vw,38px)] lg:grid-cols-[1.05fr_0.95fr]">
-            <Panel className="min-h-0 bg-[#4a0026] max-lg:min-h-[56dvh]">
+            <Panel className="min-h-0 bg-[#4a0026] max-lg:min-h-[56svh]">
               <GradientBackground
                 className="absolute inset-0"
                 colorBack="hsl(320, 100%, 19%)"
@@ -75,7 +75,10 @@ export function LaunchFrame() {
                 intensity={0.68}
                 noise={0.3}
                 scale={1.35}
-                speed={0.7}
+                rotation={-22}
+                offsetX={-0.3}
+                offsetY={0.22}
+                speed={0.62}
                 colors={[
                   "hsl(322, 100%, 46%)",
                   "hsl(318, 90%, 62%)",
@@ -119,7 +122,7 @@ export function LaunchFrame() {
             </Panel>
 
             <div className="contents lg:grid lg:min-h-0 lg:grid-rows-2 lg:gap-[clamp(24px,2.35vw,38px)]">
-              <Panel className="bg-[#3d0035] max-lg:min-h-[40dvh]">
+              <Panel className="bg-[#3d0035] max-lg:min-h-[40svh]">
                 <GradientBackground
                   className="absolute inset-0"
                   colorBack="hsl(330, 100%, 9%)"
@@ -127,8 +130,11 @@ export function LaunchFrame() {
                   softness={0.88}
                   intensity={0.7}
                   noise={0.3}
-                  scale={1.3}
-                  speed={0.78}
+                  scale={1.7}
+                  rotation={28}
+                  offsetX={0.34}
+                  offsetY={-0.28}
+                  speed={1.15}
                   colors={[
                     "hsl(330, 100%, 34%)",
                     "hsl(331, 88%, 48%)",
@@ -166,7 +172,7 @@ export function LaunchFrame() {
                 </PanelText>
               </Panel>
 
-              <Panel className="bg-[#5a002f] max-lg:min-h-[40dvh]">
+              <Panel className="bg-[#5a002f] max-lg:min-h-[40svh]">
                 <GradientBackground
                   className="absolute inset-0"
                   colorBack="hsl(329, 100%, 21%)"
@@ -174,8 +180,11 @@ export function LaunchFrame() {
                   softness={0.88}
                   intensity={0.72}
                   noise={0.32}
-                  scale={1.25}
-                  speed={0.85}
+                  scale={1.05}
+                  rotation={-48}
+                  offsetX={0.18}
+                  offsetY={0.4}
+                  speed={0.92}
                   colors={[
                     "hsl(329, 100%, 52%)",
                     "hsl(328, 92%, 68%)",

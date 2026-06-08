@@ -22,6 +22,7 @@ interface GradientBackgroundProps {
   scale?: number;
   offsetX?: number;
   offsetY?: number;
+  rotation?: number;
   speed?: number;
 }
 
@@ -40,6 +41,7 @@ export function GradientBackground({
   scale = 1,
   offsetX = 0,
   offsetY = 0,
+  rotation = 0,
   speed = 1,
 }: GradientBackgroundProps) {
   return (
@@ -54,7 +56,7 @@ export function GradientBackground({
         offsetX={offsetX}
         offsetY={offsetY}
         scale={scale}
-        rotation={0}
+        rotation={rotation}
         speed={speed}
         colors={colors}
       />

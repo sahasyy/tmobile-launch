@@ -5,7 +5,7 @@ import { LaunchFrame } from "@/components/LaunchFrame";
 
 export default function Home() {
   return (
-    <main className="relative min-h-dvh w-screen overflow-x-hidden overflow-y-auto bg-[#f3f4f8] lg:h-dvh lg:overflow-hidden">
+    <main className="relative min-h-svh w-screen overflow-x-hidden bg-white lg:h-svh lg:overflow-hidden">
       <LaunchFrame />
       <Confetti />
     </main>
