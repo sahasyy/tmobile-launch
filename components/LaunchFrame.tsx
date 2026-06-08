@@ -74,10 +74,7 @@ export function LaunchFrame() {
                 softness={0.9}
                 intensity={0.68}
                 noise={0.3}
-                scale={1.7}
-                rotation={0}
-                offsetX={-0.3}
-                offsetY={0.22}
+                scale={1.35}
                 speed={1.3}
                 colors={[
                   "hsl(322, 100%, 46%)",
