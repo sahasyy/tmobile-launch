@@ -7,20 +7,24 @@ import { GradientBackground } from "@/components/ui/paper-design-shader-backgrou
 import { Line, PanelText, Word } from "./PanelText";
 
 // One shared text timeline (seconds). The cards are static; their text
-// reveals one phrase at a time, each rising in from the ground only after
-// the previous phrase has finished:
-//   "I'm joining" → T-Mobile logo → "As an" → "ML Engineer" → "For" → "Summer 2026"
-const LINE = 0.85; // phrase rise duration
-const LOGO = 0.95; // logo rise duration
-const GAP = 0.12; // pause between phrases
+// reveals word by word, each word rising in from the ground in order:
+//   I'm · joining → logo → As · an · ML · Engineer → For · Summer · 2026
+const WORD = 0.75; // per-word rise duration
+const LOGO = 0.8; // logo rise duration
+const SAME = 0.2; // gap to next word on the same line
+const NEXT = 0.4; // gap to a new line / new card
 const T = (() => {
-  const imJoining = 0.35;
-  const logo = imJoining + LINE + GAP;
-  const asAn = logo + LOGO + GAP;
-  const mlEngineer = asAn + LINE + GAP;
-  const forr = mlEngineer + LINE + GAP;
-  const summer = forr + LINE + GAP;
-  return { imJoining, logo, asAn, mlEngineer, forr, summer };
+  const imJoining = 0.4;
+  const joining = imJoining + SAME;
+  const logo = joining + NEXT;
+  const asW = logo + NEXT;
+  const anW = asW + SAME;
+  const mlW = anW + NEXT;
+  const engineerW = mlW + SAME;
+  const forW = engineerW + NEXT;
+  const summerW = forW + NEXT;
+  const y2026W = summerW + SAME;
+  return { imJoining, joining, logo, asW, anW, mlW, engineerW, forW, summerW, y2026W };
 })();
 
 export function LaunchFrame() {
@@ -77,8 +81,11 @@ export function LaunchFrame() {
               />
               <PanelText>
                 <Line>
-                  <Word delay={T.imJoining} duration={LINE}>
-                    I&rsquo;m joining
+                  <Word delay={T.imJoining} duration={WORD}>
+                    I&rsquo;m
+                  </Word>{" "}
+                  <Word delay={T.joining} duration={WORD}>
+                    joining
                   </Word>
                 </Line>
                 <Line>
@@ -127,13 +134,19 @@ export function LaunchFrame() {
                 />
                 <PanelText>
                   <Line>
-                    <Word delay={T.asAn} duration={LINE}>
-                      As an
+                    <Word delay={T.asW} duration={WORD}>
+                      As
+                    </Word>{" "}
+                    <Word delay={T.anW} duration={WORD}>
+                      an
                     </Word>
                   </Line>
                   <Line>
-                    <Word delay={T.mlEngineer} duration={LINE}>
-                      ML Engineer
+                    <Word delay={T.mlW} duration={WORD}>
+                      ML
+                    </Word>{" "}
+                    <Word delay={T.engineerW} duration={WORD}>
+                      Engineer
                     </Word>
                   </Line>
                 </PanelText>
@@ -168,13 +181,16 @@ export function LaunchFrame() {
                 />
                 <PanelText align="right">
                   <Line>
-                    <Word delay={T.forr} duration={LINE}>
+                    <Word delay={T.forW} duration={WORD}>
                       For
                     </Word>
                   </Line>
                   <Line>
-                    <Word delay={T.summer} duration={LINE}>
-                      Summer 2026
+                    <Word delay={T.summerW} duration={WORD}>
+                      Summer
+                    </Word>{" "}
+                    <Word delay={T.y2026W} duration={WORD}>
+                      2026
                     </Word>
                   </Line>
                 </PanelText>
